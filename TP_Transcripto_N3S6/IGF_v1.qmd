@@ -14,7 +14,9 @@ editor: visual
     3. [Permutation de table](#Partie1.3)
     4. [Ajout de metadata ](#Partie1.4)
     5. [Calcul des delta Ct](#Partie1.5)
-    6. [Ploting des résultats](#Partie1.6)fix TOC
+    6. [Calcul des delta delta Ct](#Partie1.6)
+    7. [Test statistiques](#Partie1.7)
+    8. [Ploting des résultats](#Partie1.8)
 
 
 
@@ -162,7 +164,7 @@ L'objectif va être de soustraire les valeurs de Ct obtenu sur le GDM au valeurs
 #on ne garde que les deux colonne d'interêt
 RTqPCR_median_GDM_clean <- RTqPCR_median_GDM |> select(Gene, echantillon, condition, MedCt) |> distinct(condition, .keep_all = TRUE)
 
-RTqPCR_mean_GDM <- RTqPCR_median_GDM_clean |> group_by(echantillon) |> mutate(MeanCt_GDM = mean(MedCt)) |> distinct(echantillon, .keep_all = TRUE) |> ungroup()|> select(condition, MeanCt_GDM)
+RTqPCR_mean_GDM <- RTqPCR_median_GDM_clean |> group_by(echantillon) |> mutate(MeanCt_GDM = mean(MedCt)) |> distinct(echantillon, .keep_all = TRUE) |> ungroup()|> select(echantillon, MeanCt_GDM)
 ```
 
 <mark> Discutez des deux opérations ci dessus. Quel est le but de la deuxième opération? </mark>
@@ -170,18 +172,58 @@ RTqPCR_mean_GDM <- RTqPCR_median_GDM_clean |> group_by(echantillon) |> mutate(Me
 on fucionne les deux tables pour ajouter les moyenne du GDM
 ```{r}
 RTqPCR_dCt <- merge(RTqPCR_median_clean, RTqPCR_mean_GDM,
-                            by = c("condition"))
+                            by = c("echantillon"))
 
 head(RTqPCR_dCt)
+dim(RTqPCR_dCt)
 ```
 
 
 On peut maintenant soustraire les MeanCT_GDM le MedCt de nos replicats techniques pour chaques gène à la moyenne de la valeur du GDM pour cet échantillon
 
 ```{r}
-RTqPCR_dCt <- RTqPCR_dCt |> mutate(dCt = 2^-(MedCt-MeanCt_GDM))
+RTqPCR_dCt <- RTqPCR_dCt |> mutate(dCt = MedCt-MeanCt_GDM)
 
 head(RTqPCR_dCt)
 ```
 
-## 6. Ploting des résultats <a name="Partie1.6"></a>
+Faisons un peu de nettoyage
+
+```{r}
+rm(metadata1, metadata2, RTqPCR_dat, RTqPCR_dat_long, RTqPCR_dat_long_meta, RTqPCR_dat_long_meta2, RTqPCR_mean_GDM, RTqPCR_median,  RTqPCR_median_clean, RTqPCR_median_GDM, RTqPCR_median_GDM_clean) #on ne garde que la dernière table
+```
+
+## 6. Calcul des delta delta Ct<a name="Partie1.6"></a>
+Nous avons normalisé les données sur le GDM, c'est à dire sur la quantité de cDNA (ARN RT) chargé dans la plaque. Maintenant les valeurs de dCt ne sont pas facile à comparer. Pour cela nous allons normaliser une deuxième fois (le deuxième "delta"), cette fois-ci pas sur un gène mais sur un échantillon, l'échantillon Contrôle (CTR).
+
+```{r}
+# Extraction des données de l'échantillon contrôle et calcul de la moyenne
+CTR_data <- RTqPCR_dCt |> filter(echantillon == "CTR") |> group_by(Gene)|> mutate(MeanCt_CTR = mean(MedCt)) |> distinct(Gene, .keep_all = TRUE) |> ungroup() |> select(Gene, MeanCt_CTR, MeanCt_GDM)
+
+colnames(CTR_data)[3] <- "MeanCt_CTR_GDM"
+
+head(CTR_data)
+```
+
+<mark> Discutez de l'opération ci dessus. </mark>
+
+```{r}
+RTqPCR_ddCt <- merge(RTqPCR_dCt, CTR_data, by = c("Gene"))
+ 
+RTqPCR_ddCt <- RTqPCR_ddCt |> mutate(TWO_ddCt = 2^-(dCt - (MeanCt_CTR - MeanCt_CTR_GDM)))
+head(RTqPCR_ddCt)
+
+rm(CTR_data, RTqPCR_dCt) # on nettoie
+```
+
+## 7. Ploting des résultats  <a name="Partie1.7"></a>
+Dans cette partie on va pouvoir générer des plots pour enfin connaître d'où provienne nos échantillons. Les données représentent 240 observations (12 échantillons par 20 gènes), nous allons pouvoir réalisé une PCA. 
+```{r}
+
+```
+
+## 8. Test statistique <a name="Partie1.8"></a>
+
+```{r}
+
+```
