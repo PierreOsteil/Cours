@@ -161,7 +161,7 @@ Attachement du package : 'dplyr'</code></pre>
 <section id="charger-les-données" class="level2">
 <h2 class="anchored" data-anchor-id="charger-les-données">2. Charger les données <a name="Partie1.2" href=""></a></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>RTqPCR_dat <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"RT-qPCR/RT-qPCR_data.txt"</span>, <span class="at">header =</span> <span class="cn">TRUE</span>, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\t</span><span class="st">"</span>, <span class="at">dec =</span> <span class="st">","</span>) <span class="co"># argument sep = "\t" pour tabulated, et dec = "," pour décimal </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>RTqPCR_dat <span class="ot">&lt;-</span> <span class="fu">read.csv</span>( <span class="st">"C:/Users/piosteil/Desktop/4-All_git/Cours/TP_Transcripto_N3S6/RT-qPCR/RT-qPCR_data.txt"</span>, <span class="at">header =</span> <span class="cn">TRUE</span>, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\t</span><span class="st">"</span>, <span class="at">dec =</span> <span class="st">","</span>) <span class="co"># argument sep = "\t" pour tabulated, et dec = "," pour décimal </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><mark>Quelle sont les dimensions du jeu de données chargé? </mark></p>
 <div class="cell">
@@ -265,27 +265,31 @@ Attachement du package : 'dplyr'</code></pre>
 </div>
 <p>Nous avons également une autre information qui va s’avérer utile pour la suite de notr analyse, qui est une ontologie sur les trois feuillet embryonnaires. Cette information se trouve dans un autre fichier “fonction_gène.txt”. Nous allons l’ouvrir et incorporer ces données aux tableaux de résultats</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>metadata2 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"RT-qPCR/fonction_gène.txt"</span>, <span class="at">header =</span> <span class="cn">TRUE</span>, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\t</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>metadata2 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"C:/Users/piosteil/Desktop/4-All_git/Cours/TP_Transcripto_N3S6/RT-qPCR/fonction_gène.txt"</span>, <span class="at">header =</span> <span class="cn">TRUE</span>, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\t</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><mark>Quelle sont les dimensions de cette nouvelle table? Est-ce attendu? Commentez</mark></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(metadata2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 21  2</code></pre>
+<pre><code>[1] 20  2</code></pre>
 </div>
 </div>
 <p>Afin de compenser le nombre de ligne nous allons utiliser une autre fonction, merge()</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>RTqPCR_dat_long_meta2 <span class="ot">&lt;-</span> <span class="fu">merge</span>(RTqPCR_dat_long_meta, metadata2)</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(RTqPCR_dat_long_meta2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>RTqPCR_dat_long_meta2 <span class="ot">&lt;-</span> <span class="fu">merge</span>(RTqPCR_dat_long_meta, metadata2, <span class="at">by =</span> <span class="st">"Gene"</span>)</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(RTqPCR_dat_long_meta2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>   Gene condition   Ct echantillon bioRep  Fonction
-1 Foxa2 Ech1_Rep1 18.2        Ech1   Rep1 Endoderme
-2 Foxa2 Ech1_Rep2 18.9        Ech1   Rep2 Endoderme
-3 Foxa2 Ech1_Rep3 19.0        Ech1   Rep3 Endoderme
-4 Foxa2 Ech2_Rep1 20.9        Ech2   Rep1 Endoderme
-5 Foxa2 Ech2_Rep2 21.3        Ech2   Rep2 Endoderme
-6 Foxa2 Ech2_Rep3 21.8        Ech2   Rep3 Endoderme</code></pre>
+<pre><code>     Gene condition   Ct echantillon bioRep     Fonction
+715 Zfp42 Ech3_Rep1 31.8        Ech3   Rep1 Pluripotence
+716 Zfp42 Ech3_Rep2 32.1        Ech3   Rep2 Pluripotence
+717 Zfp42 Ech3_Rep3 33.0        Ech3   Rep3 Pluripotence
+718 Zfp42  CTR_Rep1 15.0         CTR   Rep1 Pluripotence
+719 Zfp42  CTR_Rep2 15.6         CTR   Rep2 Pluripotence
+720 Zfp42  CTR_Rep3 16.7         CTR   Rep3 Pluripotence</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(RTqPCR_dat_long_meta2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 720   6</code></pre>
 </div>
 </div>
 <p><mark>Comment fonctionne la fonction merge()?</mark></p>
@@ -294,8 +298,8 @@ Attachement du package : 'dplyr'</code></pre>
 <h2 class="anchored" data-anchor-id="calcul-des-delta-ct">5. Calcul des delta Ct <a name="Partie1.5" href=""></a></h2>
 <p>La première étape va être de calculer les medianes de chaques réplicats techniques. Pour cela la table va être réduite.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>RTqPCR_median <span class="ot">&lt;-</span> RTqPCR_dat_long_meta2 <span class="sc">|&gt;</span> <span class="fu">group_by</span>(condition, Gene) <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">MedCt =</span> <span class="fu">median</span>(Ct))</span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(RTqPCR_median)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>RTqPCR_median <span class="ot">&lt;-</span> RTqPCR_dat_long_meta2 <span class="sc">|&gt;</span> <span class="fu">group_by</span>(condition, Gene) <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">MedCt =</span> <span class="fu">median</span>(Ct))</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(RTqPCR_median)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 7
 # Groups:   condition, Gene [6]
@@ -312,48 +316,53 @@ Attachement du package : 'dplyr'</code></pre>
 <p><mark>Pourquoi calcules-t-on la médiane et non pas la moyenne pour les réplicats techniques? </mark></p>
 <p>Maintenant que les réplicats techniques ont été utilisés, on peut les enlever</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>RTqPCR_median_clean <span class="ot">&lt;-</span> RTqPCR_median <span class="sc">|&gt;</span> <span class="fu">group_by</span>(condition, Gene) <span class="sc">|&gt;</span> <span class="fu">filter</span>(Ct <span class="sc">==</span> MedCt) <span class="co">#on va selectioner l'échantillon median à chaque fois</span></span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(RTqPCR_median_clean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>RTqPCR_median_clean <span class="ot">&lt;-</span> RTqPCR_median <span class="sc">|&gt;</span> <span class="fu">group_by</span>(condition, Gene) <span class="sc">|&gt;</span> <span class="fu">distinct</span>(condition, <span class="at">.keep_all =</span> <span class="cn">TRUE</span>) <span class="co">#on va selectioner l'échantillon median à chaque fois</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(RTqPCR_median_clean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 7
 # Groups:   condition, Gene [6]
-  Gene  condition    Ct echantillon bioRep Fonction  MedCt
-  &lt;chr&gt; &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;  &lt;chr&gt;     &lt;dbl&gt;
-1 Foxa2 Ech1_Rep3  19   Ech1        Rep3   Endoderme  19  
-2 Foxa2 Ech2_Rep2  21.3 Ech2        Rep2   Endoderme  21.3
-3 Foxa2 Ech3_Rep1  22.7 Ech3        Rep1   Endoderme  22.7
-4 Foxa2 Ech3_Rep3  24.1 Ech3        Rep3   Endoderme  24.1
-5 Foxa2 Ech1_Rep1  17.7 Ech1        Rep1   Endoderme  17.7
-6 Foxa2 Ech1_Rep2  18.4 Ech1        Rep2   Endoderme  18.4</code></pre>
+  Gene  condition    Ct echantillon bioRep Fonction     MedCt
+  &lt;chr&gt; &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;  &lt;chr&gt;        &lt;dbl&gt;
+1 Zfp42 Ech3_Rep1  31.7 Ech3        Rep1   Pluripotence  31.7
+2 Zfp42 Ech3_Rep2  32.3 Ech3        Rep2   Pluripotence  32.1
+3 Zfp42 Ech3_Rep3  32.8 Ech3        Rep3   Pluripotence  32.8
+4 Zfp42 CTR_Rep1   15   CTR         Rep1   Pluripotence  15  
+5 Zfp42 CTR_Rep2   16   CTR         Rep2   Pluripotence  15.6
+6 Zfp42 CTR_Rep3   16.6 CTR         Rep3   Pluripotence  16.6</code></pre>
 </div>
-</div>
-<p>Nous allons extraire les données du gènes de ménage (HKG), et calculer la moyenne pour chaque échantillon</p>
-<div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>RTqPCR_median_GDM <span class="ot">&lt;-</span> RTqPCR_median <span class="sc">|&gt;</span> <span class="fu">filter</span>(Fonction <span class="sc">==</span> <span class="st">"HKG"</span>) <span class="sc">|&gt;</span> <span class="fu">group_by</span>(condition)  <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">MeanCt =</span> <span class="fu">mean</span>(MedCt))</span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(RTqPCR_median_GDM)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(RTqPCR_median_clean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code># A tibble: 6 × 8
-# Groups:   condition [6]
-  Gene  condition    Ct echantillon bioRep Fonction MedCt MeanCt
-  &lt;chr&gt; &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;  &lt;chr&gt;    &lt;dbl&gt;  &lt;dbl&gt;
-1 TBP   Ech1_Rep1  23   Ech1        Rep1   HKG       22.9   22.9
-2 TBP   Ech1_Rep2  23.9 Ech1        Rep2   HKG       23.6   23.6
-3 TBP   Ech1_Rep3  23.5 Ech1        Rep3   HKG       24     24  
-4 TBP   Ech2_Rep1  23   Ech2        Rep1   HKG       22.9   22.9
-5 TBP   Ech2_Rep2  22.6 Ech2        Rep2   HKG       23     23  
-6 TBP   Ech2_Rep3  24   Ech2        Rep3   HKG       24     24  </code></pre>
+<pre><code>[1] 240   7</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(RTqPCR_median_GDM)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><mark> A quoi sert la fonction “distinct”? </mark></p>
+<p>Nous allons extraire les données du gènes de ménage (GDM), et calculer la moyenne pour chaque échantillon</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>RTqPCR_median_GDM <span class="ot">&lt;-</span> RTqPCR_median <span class="sc">|&gt;</span> <span class="fu">filter</span>(Fonction <span class="sc">==</span> <span class="st">"GDM"</span>) </span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(RTqPCR_median_GDM)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 7
+# Groups:   condition, Gene [6]
+  Gene  condition    Ct echantillon bioRep Fonction MedCt
+  &lt;chr&gt; &lt;chr&gt;     &lt;dbl&gt; &lt;chr&gt;       &lt;chr&gt;  &lt;chr&gt;    &lt;dbl&gt;
+1 TBP   Ech1_Rep1  23   Ech1        Rep1   GDM       22.9
+2 TBP   Ech1_Rep2  23.9 Ech1        Rep2   GDM       23.6
+3 TBP   Ech1_Rep3  23.5 Ech1        Rep3   GDM       24  
+4 TBP   Ech2_Rep1  23   Ech2        Rep1   GDM       22.9
+5 TBP   Ech2_Rep2  22.6 Ech2        Rep2   GDM       23  
+6 TBP   Ech2_Rep3  24   Ech2        Rep3   GDM       24  </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(RTqPCR_median_GDM)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 36</code></pre>
 </div>
 </div>
 <p>Nous allons maintenant produire notre premier plot. Il s’agit de représenter la distibution des valeur moyenne de Ct en fonction des réplicats biologiques et des différent échantillons. Pour ceci nous allons utiliser un boxplot.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(RTqPCR_median_GDM, <span class="fu">aes</span>(<span class="at">x =</span> echantillon, <span class="at">y =</span> MedCt))<span class="sc">+</span></span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_boxplot</span>(<span class="at">fill=</span><span class="st">"slateblue"</span>, <span class="at">alpha=</span><span class="fl">0.2</span>)<span class="sc">+</span></span>
-<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ylim</span>(<span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">40</span>))<span class="sc">+</span> </span>
-<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_jitter</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(RTqPCR_median_GDM, <span class="fu">aes</span>(<span class="at">x =</span> echantillon, <span class="at">y =</span> MedCt))<span class="sc">+</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_boxplot</span>(<span class="at">fill=</span><span class="st">"slateblue"</span>, <span class="at">alpha=</span><span class="fl">0.2</span>)<span class="sc">+</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ylim</span>(<span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">40</span>))<span class="sc">+</span> </span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_jitter</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <p><img src="IGF_v1_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid" width="672"></p>
 </div>
@@ -361,49 +370,48 @@ Attachement du package : 'dplyr'</code></pre>
 <p><mark> Quelle conclusion tirez-vous de ce plot? </mark></p>
 <p>L’objectif va être de soustraire les valeurs de Ct obtenu sur le GDM au valeurs de nos gènes. Dans un premier temps nous ajoutons la colonne MeanCT_GDM à notre tableau principal</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co">#on ne garde que les deux colonne d'interêt</span></span>
-<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>RTqPCR_median_GDM_clean <span class="ot">&lt;-</span> RTqPCR_median_GDM <span class="sc">|&gt;</span> <span class="fu">select</span>(echantillon, condition, MeanCt)</span>
-<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="co">#on fucionne les deux tables</span></span>
-<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>RTqPCR_median_dCt <span class="ot">&lt;-</span> <span class="fu">merge</span>(RTqPCR_median_clean, RTqPCR_median_GDM_clean,</span>
-<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>                            <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"echantillon"</span>,<span class="st">"condition"</span>))</span>
-<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(RTqPCR_median_dCt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-stdout">
-<pre><code>  echantillon condition   Gene   Ct bioRep     Fonction MedCt MeanCt
-1         CTR  CTR_Rep1  Mesp1 31.5   Rep1    Mesoderme  31.5   22.6
-2         CTR  CTR_Rep1  Mesp1 31.5   Rep1    Mesoderme  31.5   22.6
-3         CTR  CTR_Rep1  Mesp1 31.5   Rep1    Mesoderme  31.5   22.6
-4         CTR  CTR_Rep1 Pou5F1 15.4   Rep1 Pluripotence  15.4   22.6
-5         CTR  CTR_Rep1 Pou5F1 15.4   Rep1 Pluripotence  15.4   22.6
-6         CTR  CTR_Rep1 Pou5F1 15.4   Rep1 Pluripotence  15.4   22.6</code></pre>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co">#on ne garde que les deux colonne d'interêt</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>RTqPCR_median_GDM_clean <span class="ot">&lt;-</span> RTqPCR_median_GDM <span class="sc">|&gt;</span> <span class="fu">select</span>(Gene, echantillon, condition, MedCt) <span class="sc">|&gt;</span> <span class="fu">distinct</span>(condition, <span class="at">.keep_all =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>RTqPCR_mean_GDM <span class="ot">&lt;-</span> RTqPCR_median_GDM_clean <span class="sc">|&gt;</span> <span class="fu">group_by</span>(echantillon) <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">MeanCt_GDM =</span> <span class="fu">mean</span>(MedCt)) <span class="sc">|&gt;</span> <span class="fu">distinct</span>(echantillon, <span class="at">.keep_all =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span> <span class="fu">ungroup</span>()<span class="sc">|&gt;</span> <span class="fu">select</span>(condition, MeanCt_GDM)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co">#on peut maintenant soustraire les le MedCt de nos replicats techniques pour chaques gène à la moyenne de la valeur du GDM pour cet échantillon</span></span>
-<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>RTqPCR_median_dCt<span class="sc">$</span>dCt <span class="ot">&lt;-</span> RTqPCR_median_dCt <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="dv">2</span><span class="sc">^-</span>(MedCt<span class="sc">-</span>MeanCt))</span>
-<span id="cb39-4"><a href="#cb39-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb39-5"><a href="#cb39-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(RTqPCR_median_dCt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><mark> Discutez des deux opérations ci dessus. Quel est le but de la deuxième opération? </mark></p>
+<p>on fucionne les deux tables pour ajouter les moyenne du GDM</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>RTqPCR_dCt <span class="ot">&lt;-</span> <span class="fu">merge</span>(RTqPCR_median_clean, RTqPCR_mean_GDM,</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>                            <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"condition"</span>))</span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(RTqPCR_dCt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>  echantillon condition   Gene   Ct bioRep     Fonction MedCt MeanCt
-1         CTR  CTR_Rep1  Mesp1 31.5   Rep1    Mesoderme  31.5   22.6
-2         CTR  CTR_Rep1  Mesp1 31.5   Rep1    Mesoderme  31.5   22.6
-3         CTR  CTR_Rep1  Mesp1 31.5   Rep1    Mesoderme  31.5   22.6
-4         CTR  CTR_Rep1 Pou5F1 15.4   Rep1 Pluripotence  15.4   22.6
-5         CTR  CTR_Rep1 Pou5F1 15.4   Rep1 Pluripotence  15.4   22.6
-6         CTR  CTR_Rep1 Pou5F1 15.4   Rep1 Pluripotence  15.4   22.6
-  dCt.echantillon dCt.condition dCt.Gene dCt.Ct dCt.bioRep dCt.Fonction
-1             CTR      CTR_Rep1    Mesp1   31.5       Rep1    Mesoderme
-2             CTR      CTR_Rep1    Mesp1   31.5       Rep1    Mesoderme
-3             CTR      CTR_Rep1    Mesp1   31.5       Rep1    Mesoderme
-4             CTR      CTR_Rep1   Pou5F1   15.4       Rep1 Pluripotence
-5             CTR      CTR_Rep1   Pou5F1   15.4       Rep1 Pluripotence
-6             CTR      CTR_Rep1   Pou5F1   15.4       Rep1 Pluripotence
-  dCt.MedCt dCt.MeanCt dCt.2^-(MedCt - MeanCt)
-1      31.5       22.6            2.093308e-03
-2      31.5       22.6            2.093308e-03
-3      31.5       22.6            2.093308e-03
-4      15.4       22.6            1.470334e+02
-5      15.4       22.6            1.470334e+02
-6      15.4       22.6            1.470334e+02</code></pre>
+<pre><code>  condition  Gene   Ct echantillon bioRep     Fonction MedCt MeanCt_GDM
+1  CTR_Rep1  Klf4 14.9         CTR   Rep1 Pluripotence  14.9       23.3
+2  CTR_Rep1 Hnf4a 33.2         CTR   Rep1    Endoderme  32.9       23.3
+3  CTR_Rep1 Gata6 29.0         CTR   Rep1    Endoderme  29.0       23.3
+4  CTR_Rep1 Foxa2 31.9         CTR   Rep1    Endoderme  31.0       23.3
+5  CTR_Rep1 Nanog 15.2         CTR   Rep1 Pluripotence  15.0       23.3
+6  CTR_Rep1 Mixl1 31.7         CTR   Rep1    Mesoderme  31.5       23.3</code></pre>
+</div>
+</div>
+<p>On peut maintenant soustraire les MeanCT_GDM le MedCt de nos replicats techniques pour chaques gène à la moyenne de la valeur du GDM pour cet échantillon</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>RTqPCR_dCt <span class="ot">&lt;-</span> RTqPCR_dCt <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">dCt =</span> <span class="dv">2</span><span class="sc">^-</span>(MedCt<span class="sc">-</span>MeanCt_GDM))</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(RTqPCR_dCt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  condition  Gene   Ct echantillon bioRep     Fonction MedCt MeanCt_GDM
+1  CTR_Rep1  Klf4 14.9         CTR   Rep1 Pluripotence  14.9       23.3
+2  CTR_Rep1 Hnf4a 33.2         CTR   Rep1    Endoderme  32.9       23.3
+3  CTR_Rep1 Gata6 29.0         CTR   Rep1    Endoderme  29.0       23.3
+4  CTR_Rep1 Foxa2 31.9         CTR   Rep1    Endoderme  31.0       23.3
+5  CTR_Rep1 Nanog 15.2         CTR   Rep1 Pluripotence  15.0       23.3
+6  CTR_Rep1 Mixl1 31.7         CTR   Rep1    Mesoderme  31.5       23.3
+           dCt
+1 3.377940e+02
+2 1.288582e-03
+3 1.923663e-02
+4 4.809158e-03
+5 3.151730e+02
+6 3.400588e-03</code></pre>
 </div>
 </div>
 </section>

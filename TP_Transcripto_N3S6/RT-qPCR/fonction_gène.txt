@@ -15,7 +15,6 @@ Ectoderme	Sox2
 Ectoderme	Krt14
 Ectoderme	Neurog1
 Pluripotence	Nanog
-Pluripotence	Sox2
 Pluripotence	Pou5F1
 Pluripotence	Klf4
 Pluripotence	Zfp42

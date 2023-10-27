@@ -38,7 +38,7 @@ library(ggplot2)
 
 ## 2. Charger les données <a name="Partie1.2"></a>
 ```{r}
-RTqPCR_dat <- read.csv("RT-qPCR/RT-qPCR_data.txt", header = TRUE, sep = "\t", dec = ",") # argument sep = "\t" pour tabulated, et dec = "," pour décimal 
+RTqPCR_dat <- read.csv( "C:/Users/piosteil/Desktop/4-All_git/Cours/TP_Transcripto_N3S6/RT-qPCR/RT-qPCR_data.txt", header = TRUE, sep = "\t", dec = ",") # argument sep = "\t" pour tabulated, et dec = "," pour décimal 
 ```
 
 <mark>Quelle sont les dimensions du jeu de données chargé? </mark>
@@ -100,7 +100,7 @@ Nous avons également une autre information qui va s'avérer utile pour la suite
 Nous allons l'ouvrir et incorporer ces données aux tableaux de résultats
 
 ```{r}
-metadata2 <- read.csv("RT-qPCR/fonction_gène.txt", header = TRUE, sep = "\t")
+metadata2 <- read.csv("C:/Users/piosteil/Desktop/4-All_git/Cours/TP_Transcripto_N3S6/RT-qPCR/fonction_gène.txt", header = TRUE, sep = "\t")
 ```
 
 <mark>Quelle sont les dimensions de cette nouvelle table? Est-ce attendu? Commentez</mark>
@@ -135,6 +135,8 @@ RTqPCR_median_clean <- RTqPCR_median |> group_by(condition, Gene) |> distinct(co
 tail(RTqPCR_median_clean)
 dim(RTqPCR_median_clean)
 ```
+<mark> A quoi sert la fonction "distinct"? </mark>
+
 
 Nous allons extraire les données du gènes de ménage (GDM), et calculer la moyenne pour chaque échantillon
 ```{r}
@@ -156,17 +158,27 @@ ggplot(RTqPCR_median_GDM, aes(x = echantillon, y = MedCt))+
 L'objectif va être de soustraire les valeurs de Ct obtenu sur le GDM au valeurs de nos gènes. Dans un premier temps nous ajoutons la colonne MeanCT_GDM à notre tableau principal 
 ```{r}
 #on ne garde que les deux colonne d'interêt
-RTqPCR_median_GDM_clean <- RTqPCR_median_GDM |> select(echantillon, condition, MeanCt)
-#on fucionne les deux tables
-RTqPCR_median_dCt <- merge(RTqPCR_median_clean, RTqPCR_median_GDM_clean,
-                            by = c("echantillon","condition"))
+RTqPCR_median_GDM_clean <- RTqPCR_median_GDM |> select(Gene, echantillon, condition, MedCt) |> distinct(condition, .keep_all = TRUE)
 
-head(RTqPCR_median_dCt)
+RTqPCR_mean_GDM <- RTqPCR_median_GDM_clean |> group_by(echantillon) |> mutate(MeanCt_GDM = mean(MedCt)) |> distinct(echantillon, .keep_all = TRUE) |> ungroup()|> select(condition, MeanCt_GDM)
+```
 
-#on peut maintenant soustraire les le MedCt de nos replicats techniques pour chaques gène à la moyenne de la valeur du GDM pour cet échantillon
+<mark> Discutez des deux opérations ci dessus. Quel est le but de la deuxième opération? </mark>
 
-RTqPCR_median_dCt$dCt <- RTqPCR_median_dCt |> mutate(2^-(MedCt-MeanCt))
+on fucionne les deux tables pour ajouter les moyenne du GDM
+```{r}
+RTqPCR_dCt <- merge(RTqPCR_median_clean, RTqPCR_mean_GDM,
+                            by = c("condition"))
 
-head(RTqPCR_median_dCt)
+head(RTqPCR_dCt)
+```
+
+
+On peut maintenant soustraire les MeanCT_GDM le MedCt de nos replicats techniques pour chaques gène à la moyenne de la valeur du GDM pour cet échantillon
+
+```{r}
+RTqPCR_dCt <- RTqPCR_dCt |> mutate(dCt = 2^-(MedCt-MeanCt_GDM))
+
+head(RTqPCR_dCt)
 ```
 
