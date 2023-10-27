@@ -1,0 +1,172 @@
+---
+title: "TP N3S6 - Introduction Génomique Fonctionnelle  2024"
+format : html
+date : 2023.10.15
+author: Pierre Osteil
+editor: visual
+---
+
+# Table des Matières
+1. [Introduction](#Intro)
+2. [Analyse de données RT-qPCR avec R-Studio ](#Partie1)
+    1. [Charger les packages](#Partie1.1)
+    2. [Charger les données](#Partie1.2)
+    3. [Permutation de table](#Partie1.3)
+    4. [Ajout de metadata ](#Partie1.4)
+    5. [Calcul des delta Ct](#Partie1.5)
+
+
+# Introduction <a name="Intro"></a>
+Lors de ce TP vous avez reçu un numéro. Ce numéro correspond à un type cellulaire chez un mammifère. Le jeu consiste, grâce aux données que vous avez en main, à identifier à quel type cellulaire votre numéro correspond. Pour cela nous allons effectué un ensemble de lignes de commandes du logiciel R. Elle seront appliquées sur R Studio et l'ensemble des données produites pourra être visualisé grâce au programme Quarto, utilisé pour générer ce document. 
+
+Le TP sera réalisé sur 8 séances de 1H30. Un compte-rendu sera produit et comptera pour --% de la note finale de contôle continu. Le compte rendu sera réalisé en remplissant les sections indiquées sur ce document. 
+
+# Analyse de données RT-qPCR avec R-Studio <a name="Partie1"></a>
+## 1. Charger les packages <a name="Partie1.2"></a>
+```{r}
+#Installer les packages
+#install.packages("tidyr")
+#install.packages("dplyr")
+#install.packages("ggplot2")
+
+#charger les packageSlot
+library(tidyr)
+library(dplyr)
+library(stringr)
+library(ggplot2)
+```
+
+## 2. Charger les données <a name="Partie1.2"></a>
+```{r}
+RTqPCR_dat <- read.csv("RT-qPCR/RT-qPCR_data.txt", header = TRUE, sep = "\t", dec = ",") # argument sep = "\t" pour tabulated, et dec = "," pour décimal 
+```
+
+<mark>Quelle sont les dimensions du jeu de données chargé? </mark>
+```{r}
+dim(RTqPCR_dat)
+```
+
+<mark>Combien de réplicat par echantillons ont été effectué? </mark>
+```{r}
+head(RTqPCR_dat)
+```
+
+## 3. Permutation de table <a name="Partie1.3"></a>
+Les tableaux fourni par les machines d'analyses ne sont souvent pas adapté à la production de plots. L'utilisation de ggplot2 requiert une organisation spéciale avec pour chaque colonne un type de donnée. Nous allons donc réorganiser le tableau. Pour cela les fonctions du package tidyr vont nous permettre de manipuler le tableau sans aucun risque d'erreur de mauvaises manipulations de copier/coller
+```{r}
+RTqPCR_dat_long <- RTqPCR_dat |> pivot_longer(cols = 2:13, names_to = "condition", values_to = "Ct")
+```
+
+<mark>Quelle sont les dimensions de cette nouvelle table? </mark>
+
+```{r}
+dim(RTqPCR_dat_long)
+```
+
+<mark>Que fait pivot_longer()? </mark>
+
+```{r}
+head(RTqPCR_dat_long)
+```
+
+## 4. Ajout de metadata <a name="Partie1.4"></a>
+Les données sont généralement brutes. Afin de présenter des plots compréhensible, il faut ajouter des métadata, qui sont des informations supplémentaire pour chaque échantillons. 
+
+Ici nous allons créer une colonne pour le nom de chaque échantillon et le nom de chaque réplicats.  
+```{r}
+#Création d'un tableau à deux colonnes
+metadata1 <- str_split_fixed(RTqPCR_dat_long$condition, "_", 2)
+colnames(metadata1) <- c("echantillon", "bioRep")
+```
+
+<mark>Que fait str_split_fixed()?</mark>
+```{r}
+head(metadata1)
+```
+
+<mark>Quelle sont les dimensions de cette nouvelle table? Est-ce attendu? Commentez </mark>
+```{r}
+dim(metadata1) 
+```
+
+Combinez avec le tableau de résultats
+
+```{r}
+RTqPCR_dat_long_meta <- cbind.data.frame(RTqPCR_dat_long, metadata1)
+head(RTqPCR_dat_long_meta)
+```
+
+Nous avons également une autre information qui va s'avérer utile pour la suite de notr analyse, qui est une ontologie sur les trois feuillet embryonnaires. Cette information se trouve dans un autre fichier "fonction_gène.txt". 
+Nous allons l'ouvrir et incorporer ces données aux tableaux de résultats
+
+```{r}
+metadata2 <- read.csv("RT-qPCR/fonction_gène.txt", header = TRUE, sep = "\t")
+```
+
+<mark>Quelle sont les dimensions de cette nouvelle table? Est-ce attendu? Commentez</mark>
+```{r}
+dim(metadata2)
+```
+
+Afin de compenser le nombre de ligne nous allons utiliser une autre fonction, merge()
+```{r}
+RTqPCR_dat_long_meta2 <- merge(RTqPCR_dat_long_meta, metadata2, by = "Gene")
+tail(RTqPCR_dat_long_meta2)
+dim(RTqPCR_dat_long_meta2)
+```
+<mark>Comment fonctionne la fonction merge()?</mark>
+
+
+## 5. Calcul des delta Ct <a name="Partie1.5"></a>
+La première étape va être de calculer les medianes de chaques réplicats techniques. 
+Pour cela la table va être réduite. 
+
+```{r}
+RTqPCR_median <- RTqPCR_dat_long_meta2 |> group_by(condition, Gene) |> mutate(MedCt = median(Ct))
+head(RTqPCR_median)
+```
+
+<mark>Pourquoi calcules-t-on la médiane et non pas la moyenne pour les réplicats techniques? </mark>
+
+
+Maintenant que les réplicats techniques ont été utilisés, on peut les enlever
+```{r}
+RTqPCR_median_clean <- RTqPCR_median |> group_by(condition, Gene) |> distinct(condition, .keep_all = TRUE) #on va selectioner l'échantillon median à chaque fois
+tail(RTqPCR_median_clean)
+dim(RTqPCR_median_clean)
+```
+
+Nous allons extraire les données du gènes de ménage (GDM), et calculer la moyenne pour chaque échantillon
+```{r}
+RTqPCR_median_GDM <- RTqPCR_median |> filter(Fonction == "GDM") 
+head(RTqPCR_median_GDM)
+nrow(RTqPCR_median_GDM)
+```
+
+Nous allons maintenant produire notre premier plot. Il s'agit de représenter la distibution des valeur moyenne de Ct en fonction des réplicats biologiques et des différent échantillons. Pour ceci nous allons utiliser un boxplot. 
+```{r}
+ggplot(RTqPCR_median_GDM, aes(x = echantillon, y = MedCt))+
+    geom_boxplot(fill="slateblue", alpha=0.2)+
+    ylim(c(10, 40))+ 
+    geom_jitter()
+```
+
+<mark> Quelle conclusion tirez-vous de ce plot? </mark>
+
+L'objectif va être de soustraire les valeurs de Ct obtenu sur le GDM au valeurs de nos gènes. Dans un premier temps nous ajoutons la colonne MeanCT_GDM à notre tableau principal 
+```{r}
+#on ne garde que les deux colonne d'interêt
+RTqPCR_median_GDM_clean <- RTqPCR_median_GDM |> select(echantillon, condition, MeanCt)
+#on fucionne les deux tables
+RTqPCR_median_dCt <- merge(RTqPCR_median_clean, RTqPCR_median_GDM_clean,
+                            by = c("echantillon","condition"))
+
+head(RTqPCR_median_dCt)
+
+#on peut maintenant soustraire les le MedCt de nos replicats techniques pour chaques gène à la moyenne de la valeur du GDM pour cet échantillon
+
+RTqPCR_median_dCt$dCt <- RTqPCR_median_dCt |> mutate(2^-(MedCt-MeanCt))
+
+head(RTqPCR_median_dCt)
+```
+
