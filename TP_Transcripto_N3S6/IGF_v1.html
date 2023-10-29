@@ -120,8 +120,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><a href="#Partie1.4">Ajout de metadata</a></li>
 <li><a href="#Partie1.5">Calcul des delta Ct</a></li>
 <li><a href="#Partie1.6">Calcul des delta delta Ct</a></li>
-<li><a href="#Partie1.7">Test statistiques</a></li>
-<li><a href="#Partie1.8">Ploting des résultats</a></li>
+<li><a href="#Partie1.7">Ploting ACP</a></li>
+<li><a href="#Partie1.8">Annotation des groupes pour chaque echantillon</a></li>
 </ol></li>
 </ol>
 </section>
@@ -139,10 +139,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("tidyr")</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("dplyr")</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("ggplot2")</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">#charger les packageSlot</span></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("FactoMineR")</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">#charger les packageSlot</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>
 Attachement du package : 'dplyr'</code></pre>
@@ -158,7 +159,8 @@ Attachement du package : 'dplyr'</code></pre>
     intersect, setdiff, setequal, union</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stringr)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(FactoMineR)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="charger-les-données" class="level2">
@@ -463,15 +465,83 @@ Attachement du package : 'dplyr'</code></pre>
 5   31.86667           23.3    0.9117225
 6   31.86667           23.3 2144.8583635</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(CTR_data, RTqPCR_dCt) <span class="co"># on nettoie</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(RTqPCR_ddCt, <span class="st">"C:/Users/piosteil/Desktop/4-All_git/Cours/TP_Transcripto_N3S6/RT-qPCR/RTqPCR_ddCt.csv"</span>)</span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(CTR_data, RTqPCR_dCt) <span class="co"># on nettoie</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="ploting-des-résultats" class="level2">
 <h2 class="anchored" data-anchor-id="ploting-des-résultats">7. Ploting des résultats <a name="Partie1.7" href=""></a></h2>
+<p>Dans cette partie on va pouvoir générer des plots pour enfin connaître d’où provienne nos échantillons. Les données représentent 240 observations (12 échantillons par 20 gènes), nous allons pouvoir réalisé une ACP.</p>
+<p><mark> Qu’est-ce qu’une ACP ? </mark></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="co">#on doit pivoter le tableau pour la pca</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a><span class="co">#avant cela enlevons les colonnes inutiles</span></span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>RTqPCR_dCt_only <span class="ot">&lt;-</span> RTqPCR_ddCt <span class="sc">|&gt;</span> <span class="fu">select</span>(condition, Gene, dCt)</span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a><span class="co"># on utilise pivot_wider cette fois ci</span></span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a>RTqPCR_dCt_wide <span class="ot">&lt;-</span> RTqPCR_dCt_only <span class="sc">|&gt;</span> <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> Gene, <span class="at">values_from =</span> dCt)</span>
+<span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a><span class="co">#write.csv(RTqPCR_dCt_wide, "./TP_Transcripto_N3S6/RT-qPCR/RTqPCR_dCt_wider.csv")</span></span>
+<span id="cb54-8"><a href="#cb54-8" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(RTqPCR_dCt_wide)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 21
+  condition  Foxa2 Gata6  Hand2  Hnf4a  Klf4  Krt14  Mesp1  Mixl1 Nanog Nestin
+  &lt;chr&gt;      &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
+1 Ech3_Rep3  0.733 -2.07  0.633  2.33   9.63 -7.07   1.03   1.03   9.63 -7.37 
+2 CTR_Rep1   7.7    5.7   8      9.6   -8.4   8.5    8.2    8.2   -8.3   8.5  
+3 Ech3_Rep2 -0.367 -3.07 -0.167  1.63   8.83 -7.87   0.333  0.333  8.83 -7.77 
+4 Ech2_Rep2 -2     -4.40 -7.6    0.300  8.9   0     -8     -8.1    8.9  -0.200
+5 CTR_Rep2   8.7    6.2   8.7   10.7   -7.7   9.3    9.2    9.1   -7.4   9.1  
+6 Ech2_Rep1 -2.5   -5.4  -8.3   -0.300  8    -0.900 -8.7   -8.6    8.2  -0.600
+# ℹ 10 more variables: Neurog1 &lt;dbl&gt;, Pax6 &lt;dbl&gt;, Pdx1 &lt;dbl&gt;, Pou5F1 &lt;dbl&gt;,
+#   Sox17 &lt;dbl&gt;, Sox2 &lt;dbl&gt;, TBP &lt;dbl&gt;, TBra &lt;dbl&gt;, Tbx6 &lt;dbl&gt;, Zfp42 &lt;dbl&gt;</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>pca_rtqpcr <span class="ot">&lt;-</span> RTqPCR_dCt_wide <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="fu">where</span>(is.numeric)) <span class="sc">|&gt;</span> <span class="fu">prcomp</span>()</span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>RTqPCR_dCt_ACP <span class="ot">&lt;-</span> <span class="fu">cbind.data.frame</span>(RTqPCR_dCt_wide, pca_rtqpcr<span class="sc">$</span>x[,<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>])</span>
+<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(RTqPCR_dCt_ACP)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  condition      Foxa2     Gata6      Hand2     Hnf4a      Klf4     Krt14
+1 Ech3_Rep3  0.7333333 -2.066667  0.6333333  2.333333  9.633333 -7.066667
+2  CTR_Rep1  7.7000000  5.700000  8.0000000  9.600000 -8.400000  8.500000
+3 Ech3_Rep2 -0.3666667 -3.066667 -0.1666667  1.633333  8.833333 -7.866667
+4 Ech2_Rep2 -2.0000000 -4.400000 -7.6000000  0.300000  8.900000  0.000000
+5  CTR_Rep2  8.7000000  6.200000  8.7000000 10.700000 -7.700000  9.300000
+6 Ech2_Rep1 -2.5000000 -5.400000 -8.3000000 -0.300000  8.000000 -0.900000
+       Mesp1      Mixl1     Nanog    Nestin   Neurog1      Pax6       Pdx1
+1  1.0333333  1.0333333  9.633333 -7.366667 -7.166667 -6.866667  0.7333333
+2  8.2000000  8.2000000 -8.300000  8.500000  6.000000  8.200000  8.2000000
+3  0.3333333  0.3333333  8.833333 -7.766667 -8.166667 -7.766667 -0.3666667
+4 -8.0000000 -8.1000000  8.900000 -0.200000  0.400000 -7.900000 -1.7000000
+5  9.2000000  9.1000000 -7.400000  9.100000  7.100000  8.800000  8.8000000
+6 -8.7000000 -8.6000000  8.200000 -0.600000 -0.300000 -8.400000 -2.3000000
+     Pou5F1      Sox17      Sox2        TBP       TBra       Tbx6     Zfp42
+1  9.633333  0.8333333 -6.866667  0.7333333  1.0333333  1.0333333  9.433333
+2 -7.900000  5.7000000 -8.400000 -0.7000000  8.3000000  8.3000000 -8.300000
+3  8.733333  0.1333333 -7.666667 -0.1666667  0.3333333  0.3333333  8.733333
+4  8.800000 -0.2000000 -0.100000 -0.3000000 -7.7000000 -7.8000000  8.700000
+5 -7.400000  6.3000000 -7.700000 -0.1000000  8.8000000  9.1000000 -7.700000
+6  8.200000 -1.1000000 -2.200000 -0.4000000 -8.3000000 -8.4000000  7.900000
+        PC1        PC2       PC3
+1  10.28376 -12.386910 4.5964062
+2 -38.99849   1.439305 1.3147275
+3  11.64849 -12.233778 4.8274952
+4  17.99216  11.046558 5.7081439
+5 -40.40400   1.315166 0.8920156
+6  18.84877  10.786806 6.1362918</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot</span></span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(RTqPCR_dCt_ACP, <span class="fu">aes</span>(PC1, PC2, <span class="at">color =</span> condition)) <span class="sc">+</span> </span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="IGF_v1_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<p><mark> Decrivez le plot obtenu </mark></p>
+<p><mark> Realisez un plot avec votre echantillon en couleur et le reste en gris </mark></p>
+<p>Pour ameliorer vos plots: <a href="https://www.maths.usyd.edu.au/u/UG/SM/STAT3022/r/current/Misc/data-visualization-2.1.pdf">cheatsheet</a></p>
 </section>
-<section id="ploting-des-résultats-1" class="level2">
-<h2 class="anchored" data-anchor-id="ploting-des-résultats-1">8. Ploting des résultats <a name="Partie1.8" href=""></a></h2>
-<p>Dans cette partie on va pouvoir générer des plots pour enfin connaître d’où provienne nos échantillons.</p>
+<section id="annotation-des-groupes-pour-chaque-echantillon" class="level2">
+<h2 class="anchored" data-anchor-id="annotation-des-groupes-pour-chaque-echantillon">8. Annotation des groupes pour chaque echantillon <a name="Partie1.8" href=""></a></h2>
 </section>
 </section>
 
