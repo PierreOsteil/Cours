@@ -31,12 +31,14 @@ Le TP sera réalisé sur 8 séances de 1H30. Un compte-rendu sera produit et com
 ```{r}
 #Installer les packages
 #install.packages("tidyverse")
+#install.packages("ggpubr")
 
 #charger les packageSlot
 library(tidyr)
 library(dplyr)
 library(stringr)
 library(ggplot2)
+library(ggpubr)
 ```
 
 ## 2. Charger les données <a name="Partie1.2"></a>
@@ -250,18 +252,18 @@ Pour ameliorer vos plots: [cheatsheet](https://www.maths.usyd.edu.au/u/UG/SM/STA
 ### 8.1 calul des p.values
 Avant de plotter l'expression de chaque gene, on va calculer la p.value. Ensuite on pourra plotter seulement les genes significativement, differentiellement exprimés. 
 ```{r}
-my_sample <- "Ech3" 
-RTqPCR_ddCt <- RTqPCR_ddCt |> filter(echantillon %in% c("CTR", my_sample)) |> group_by(Gene) |> mutate(pval = list(t.test(dCt[echantillon == my_sample], dCt[echantillon == "CTR"])$p.value))
+my_sample <- "Ech1" 
 
-head(RTqPCR_ddCt)$pval
+RTqPCR_ddCt_Ech <- RTqPCR_ddCt |> filter(echantillon %in% c("CTR", my_sample)) |> group_by(Gene) |> mutate(pval = list(t.test(dCt[echantillon == my_sample], dCt[echantillon == "CTR"])$p.value))
+
+head(RTqPCR_ddCt_Ech)$pval
 ```
 
 
-### 8.2 Plot des genes significatifs
+### 8.2 Plot des genes
 ```{r}
-RTqPCR_ddCt_signif <- RTqPCR_ddCt |> filter(pval <= 0.05) #moins de genes doivent etre selectionnes
-
-
-
-
+ggplot(RTqPCR_ddCt_Ech, aes(x=echantillon, y = TWO_ddCt, fill = Fonction))+
+    geom_boxplot()+ 
+    facet_wrap("Gene")+
+    scale_fill_manual(values = c("Cyan", "Green", "black","Red", "Magenta"))
 ```
