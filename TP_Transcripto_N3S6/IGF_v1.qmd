@@ -15,16 +15,16 @@ editor: visual
     4. [Ajout de metadata ](#Partie1.4)
     5. [Calcul des delta Ct](#Partie1.5)
     6. [Calcul des delta delta Ct](#Partie1.6)
-    7. [Ploting ACP](#Partie1.7)
+    7. [Plot des résultats](#Partie1.7)
     8. [Annotation des groupes pour chaque echantillon ](#Partie1.8)
 
 
 
 # Introduction <a name="Intro"></a>
-Lors de ce TP vous avez reçu un numéro. Ce numéro correspond à un type cellulaire chez un mammifère. Le jeu consiste, grâce aux données que vous avez en main, à identifier à quel type cellulaire votre numéro correspond. Pour cela nous allons effectué un ensemble de lignes de commandes du logiciel R. Elle seront appliquées sur R Studio et l'ensemble des données produites pourra être visualisé grâce au programme Quarto, utilisé pour générer ce document. 
-Vous pouvez également consulter cet ouvrage: [R for Data Science](https://r4ds.had.co.nz/)
+Lors de ce TP vous avez reçu un numéro. Ce numéro correspond à un type cellulaire chez un mammifère. Le jeu consiste, grâce aux données que vous avez en main, à identifier à quel type cellulaire votre numéro correspond. Pour cela nous allons effectuer un ensemble de lignes de commandes du logiciel R. Elle seront appliquées sur R Studio et l'ensemble des données produites pourra être visualisé grâce au programme Quarto, utilisé pour générer ce document. 
+ Afin d'améliorer vos compétences, vous pouvez consulter cet ouvrage: [R for Data Science](https://r4ds.had.co.nz/)
 
-Le TP sera réalisé sur 8 séances de 1H30. Un compte-rendu sera produit et comptera pour --% de la note finale de contôle continu. Le compte rendu sera réalisé en remplissant les sections indiquées sur ce document. 
+Le TP sera réalisé sur 8 séances de 1H30. Le compte rendu sera réalisé en remplissant les sections indiquées sur ce document et nous le corrigerons en TD. 
 
 # Analyse de données RT-qPCR avec R-Studio <a name="Partie1"></a>
 ## 1. Charger les packages <a name="Partie1.2"></a>
@@ -217,7 +217,7 @@ write.csv(RTqPCR_ddCt, "C:/Users/piosteil/Desktop/4-All_git/Cours/TP_Transcripto
 rm(CTR_data, RTqPCR_dCt) # on nettoie
 ```
 
-## 7. Ploting des résultats  <a name="Partie1.7"></a>
+## 7. Plot des résultats  <a name="Partie1.7"></a>
 Dans cette partie on va pouvoir générer des plots pour enfin connaître d'où provienne nos échantillons. Les données représentent 240 observations (12 échantillons par 20 gènes), nous allons pouvoir réalisé une ACP. 
 
 <mark> Qu'est-ce qu'une ACP ? </mark>

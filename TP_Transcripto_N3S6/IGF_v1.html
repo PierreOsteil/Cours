@@ -120,15 +120,15 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <li><a href="#Partie1.4">Ajout de metadata</a></li>
 <li><a href="#Partie1.5">Calcul des delta Ct</a></li>
 <li><a href="#Partie1.6">Calcul des delta delta Ct</a></li>
-<li><a href="#Partie1.7">Ploting ACP</a></li>
+<li><a href="#Partie1.7">Plot des résultats</a></li>
 <li><a href="#Partie1.8">Annotation des groupes pour chaque echantillon</a></li>
 </ol></li>
 </ol>
 </section>
 <section id="introduction" class="level1">
 <h1>Introduction <a name="Intro" href=""></a></h1>
-<p>Lors de ce TP vous avez reçu un numéro. Ce numéro correspond à un type cellulaire chez un mammifère. Le jeu consiste, grâce aux données que vous avez en main, à identifier à quel type cellulaire votre numéro correspond. Pour cela nous allons effectué un ensemble de lignes de commandes du logiciel R. Elle seront appliquées sur R Studio et l’ensemble des données produites pourra être visualisé grâce au programme Quarto, utilisé pour générer ce document. Vous pouvez egqlement consulter cet ouvrage: <a href="https://r4ds.had.co.nz/">R for Data Science</a></p>
-<p>Le TP sera réalisé sur 8 séances de 1H30. Un compte-rendu sera produit et comptera pour –% de la note finale de contôle continu. Le compte rendu sera réalisé en remplissant les sections indiquées sur ce document.</p>
+<p>Lors de ce TP vous avez reçu un numéro. Ce numéro correspond à un type cellulaire chez un mammifère. Le jeu consiste, grâce aux données que vous avez en main, à identifier à quel type cellulaire votre numéro correspond. Pour cela nous allons effectuer un ensemble de lignes de commandes du logiciel R. Elle seront appliquées sur R Studio et l’ensemble des données produites pourra être visualisé grâce au programme Quarto, utilisé pour générer ce document. Afin d’améliorer vos compétences, vous pouvez consulter cet ouvrage: <a href="https://r4ds.had.co.nz/">R for Data Science</a></p>
+<p>Le TP sera réalisé sur 8 séances de 1H30. Le compte rendu sera réalisé en remplissant les sections indiquées sur ce document et nous le corrigerons en TD.</p>
 </section>
 <section id="analyse-de-données-rt-qpcr-avec-r-studio" class="level1">
 <h1>Analyse de données RT-qPCR avec R-Studio <a name="Partie1" href=""></a></h1>
@@ -137,10 +137,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Installer les packages</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("tidyverse")</span></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">#charger les packageSlot</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("ggpubr")</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">#charger les packageSlot</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>
 Attachement du package : 'dplyr'</code></pre>
@@ -156,7 +157,8 @@ Attachement du package : 'dplyr'</code></pre>
     intersect, setdiff, setequal, union</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stringr)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggpubr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="charger-les-données" class="level2">
@@ -181,7 +183,7 @@ Attachement du package : 'dplyr'</code></pre>
 3 Foxa2      17.5      18.1      19.1      20.7      21.2      23.0      22.9
 4 Gata6      15.3      16.3      16.3      17.9      18.5      19.1      19.4
 5 Gata6      14.9      16.1      16.7      17.8      18.9      19.9      19.4
-6 Gata6      15.0      16.1      16.8      18.1      19.0      19.8      19.4
+6 Gata6      15.0      16.2      16.8      18.1      19.0      19.8      19.4
   Ech3_Rep2 Ech3_Rep3 CTR_Rep1 CTR_Rep2 CTR_Rep3
 1      23.4      24.1     31.9     32.3     32.5
 2      23.0      24.1     30.6     32.0     32.6
@@ -282,10 +284,10 @@ Attachement du package : 'dplyr'</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>     Gene condition   Ct echantillon bioRep     Fonction
 715 Zfp42 Ech3_Rep1 31.8        Ech3   Rep1 Pluripotence
-716 Zfp42 Ech3_Rep2 32.1        Ech3   Rep2 Pluripotence
+716 Zfp42 Ech3_Rep2 31.7        Ech3   Rep2 Pluripotence
 717 Zfp42 Ech3_Rep3 33.0        Ech3   Rep3 Pluripotence
 718 Zfp42  CTR_Rep1 15.0         CTR   Rep1 Pluripotence
-719 Zfp42  CTR_Rep2 15.6         CTR   Rep2 Pluripotence
+719 Zfp42  CTR_Rep2 15.4         CTR   Rep2 Pluripotence
 720 Zfp42  CTR_Rep3 16.7         CTR   Rep3 Pluripotence</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(RTqPCR_dat_long_meta2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -465,8 +467,8 @@ Attachement du package : 'dplyr'</code></pre>
 <span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(CTR_data, RTqPCR_dCt) <span class="co"># on nettoie</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
-<section id="ploting-des-résultats" class="level2">
-<h2 class="anchored" data-anchor-id="ploting-des-résultats">7. Ploting des résultats <a name="Partie1.7" href=""></a></h2>
+<section id="plot-des-résultats" class="level2">
+<h2 class="anchored" data-anchor-id="plot-des-résultats">7. Plot des résultats <a name="Partie1.7" href=""></a></h2>
 <p>Dans cette partie on va pouvoir générer des plots pour enfin connaître d’où provienne nos échantillons. Les données représentent 240 observations (12 échantillons par 20 gènes), nous allons pouvoir réalisé une ACP.</p>
 <p><mark> Qu’est-ce qu’une ACP ? </mark></p>
 <div class="cell">
@@ -507,23 +509,23 @@ Attachement du package : 'dplyr'</code></pre>
 1  1.0333333  1.0333333  9.633333 -7.366667 -7.166667 -6.866667  0.7333333
 2  8.2000000  8.2000000 -8.300000  8.500000  6.000000  8.200000  8.2000000
 3  0.3333333  0.3333333  8.833333 -7.766667 -8.166667 -7.766667 -0.3666667
-4 -8.0000000 -8.1000000  8.900000 -0.200000  0.400000 -7.900000 -1.7000000
+4 -8.0000000 -8.1000000  8.900000 -0.200000  0.400000  0.710000 -1.7000000
 5  9.2000000  9.1000000 -7.400000  9.100000  7.100000  8.800000  8.8000000
-6 -8.7000000 -8.6000000  8.200000 -0.600000 -0.300000 -8.400000 -2.3000000
+6 -8.7000000 -8.6000000  8.200000 -0.600000 -0.300000  0.010000 -2.3000000
      Pou5F1      Sox17      Sox2        TBP       TBra       Tbx6     Zfp42
-1  9.633333  0.8333333 -6.866667  0.7333333  1.0333333  1.0333333  9.433333
-2 -7.900000  5.7000000 -8.400000 -0.7000000  8.3000000  8.3000000 -8.300000
-3  8.733333  0.1333333 -7.666667 -0.1666667  0.3333333  0.3333333  8.733333
+1  9.633333  0.8333333 -6.866667  0.7333333  1.0333333  0.8333333  9.433333
+2 -7.900000  5.7000000 -7.400000 -0.7000000  8.3000000  8.3000000 -8.300000
+3  8.733333  0.1333333 -7.766667 -0.1666667  0.2333333  0.3333333  8.733333
 4  8.800000 -0.2000000 -0.100000 -0.3000000 -7.7000000 -7.8000000  8.700000
-5 -7.400000  6.3000000 -7.700000 -0.1000000  8.8000000  9.1000000 -7.700000
+5 -7.400000  6.3000000 -6.600000 -0.1000000  8.8000000  9.1000000 -7.700000
 6  8.200000 -1.1000000 -2.200000 -0.4000000 -8.3000000 -8.4000000  7.900000
-        PC1        PC2       PC3
-1  10.28376 -12.386910 4.5964062
-2 -38.99849   1.439305 1.3147275
-3  11.64849 -12.233778 4.8274952
-4  17.99216  11.046558 5.7081439
-5 -40.40400   1.315166 0.8920156
-6  18.84877  10.786806 6.1362918</code></pre>
+        PC1         PC2       PC3
+1  10.73089 -13.2482946 4.0779416
+2 -38.47091   0.8796006 0.9517404
+3  12.04431 -13.3692460 4.1727334
+4  16.28734  11.8140398 5.7514030
+5 -39.86492   0.9073582 0.5352716
+6  17.20867  11.3653818 6.1388310</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot</span></span>
 <span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(RTqPCR_dCt_ACP, <span class="fu">aes</span>(PC1, PC2, <span class="at">color =</span> condition)) <span class="sc">+</span> </span>
@@ -538,6 +540,48 @@ Attachement du package : 'dplyr'</code></pre>
 </section>
 <section id="annotation-des-groupes-pour-chaque-echantillon" class="level2">
 <h2 class="anchored" data-anchor-id="annotation-des-groupes-pour-chaque-echantillon">8. Annotation des groupes pour chaque echantillon <a name="Partie1.8" href=""></a></h2>
+<section id="calul-des-p.values" class="level3">
+<h3 class="anchored" data-anchor-id="calul-des-p.values">8.1 calul des p.values</h3>
+<p>Avant de plotter l’expression de chaque gene, on va calculer la p.value. Ensuite on pourra plotter seulement les genes significativement, differentiellement exprimés.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>my_sample <span class="ot">&lt;-</span> <span class="st">"Ech1"</span> </span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a>RTqPCR_ddCt_Ech <span class="ot">&lt;-</span> RTqPCR_ddCt <span class="sc">|&gt;</span> <span class="fu">filter</span>(echantillon <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"CTR"</span>, my_sample)) <span class="sc">|&gt;</span> <span class="fu">group_by</span>(Gene) <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">pval =</span> <span class="fu">list</span>(<span class="fu">t.test</span>(dCt[echantillon <span class="sc">==</span> my_sample], dCt[echantillon <span class="sc">==</span> <span class="st">"CTR"</span>])<span class="sc">$</span>p.value))</span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(RTqPCR_ddCt_Ech)<span class="sc">$</span>pval</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[[1]]
+[1] 3.106891e-05
+
+[[2]]
+[1] 3.106891e-05
+
+[[3]]
+[1] 3.106891e-05
+
+[[4]]
+[1] 3.106891e-05
+
+[[5]]
+[1] 3.106891e-05
+
+[[6]]
+[1] 3.106891e-05</code></pre>
+</div>
+</div>
+</section>
+<section id="plot-des-genes" class="level3">
+<h3 class="anchored" data-anchor-id="plot-des-genes">8.2 Plot des genes</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(RTqPCR_ddCt_Ech, <span class="fu">aes</span>(<span class="at">x=</span>echantillon, <span class="at">y =</span> TWO_ddCt, <span class="at">fill =</span> Fonction))<span class="sc">+</span></span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_boxplot</span>()<span class="sc">+</span> </span>
+<span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="st">"Gene"</span>)<span class="sc">+</span></span>
+<span id="cb61-4"><a href="#cb61-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Cyan"</span>, <span class="st">"Green"</span>, <span class="st">"black"</span>,<span class="st">"Red"</span>, <span class="st">"Magenta"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="IGF_v1_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</section>
 </section>
 </section>
 
