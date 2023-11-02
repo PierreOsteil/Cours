@@ -112,17 +112,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h1>Table des Matières</h1>
 <ol type="1">
 <li><a href="#Intro">Introduction</a></li>
-<li><a href="#Partie1">Analyse de données RT-qPCR avec R-Studio</a>
+<li><a href="#Partie2">Analyse de données RT-qPCR avec R-Studio</a>
 <ol type="1">
-<li><a href="#Partie1.1">Charger les packages</a></li>
-<li><a href="#Partie1.2">Charger les données</a></li>
-<li><a href="#Partie1.3">Permutation de table</a></li>
-<li><a href="#Partie1.4">Ajout de metadata</a></li>
-<li><a href="#Partie1.5">Calcul des delta Ct</a></li>
-<li><a href="#Partie1.6">Calcul des delta delta Ct</a></li>
-<li><a href="#Partie1.7">Plot des résultats</a></li>
-<li><a href="#Partie1.8">Annotation des groupes pour chaque echantillon</a></li>
+<li><a href="#Partie2.1">Charger les packages</a></li>
+<li><a href="#Partie2.2">Charger les données</a></li>
+<li><a href="#Partie2.3">Permutation de table</a></li>
+<li><a href="#Partie2.4">Ajout de metadata</a></li>
+<li><a href="#Partie2.5">Calcul des delta Ct</a></li>
+<li><a href="#Partie2.6">Calcul des delta delta Ct</a></li>
+<li><a href="#Partie2.7">Plot des résultats</a></li>
+<li><a href="#Partie2.8">Annotation des groupes pour chaque echantillon</a></li>
 </ol></li>
+<li><a href="#Partie3">RNA-seq</a></li>
 </ol>
 </section>
 <section id="introduction" class="level1">
@@ -131,9 +132,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Le TP sera réalisé sur 8 séances de 1H30. Le compte rendu sera réalisé en remplissant les sections indiquées sur ce document et nous le corrigerons en TD.</p>
 </section>
 <section id="analyse-de-données-rt-qpcr-avec-r-studio" class="level1">
-<h1>Analyse de données RT-qPCR avec R-Studio <a name="Partie1" href=""></a></h1>
+<h1>Analyse de données RT-qPCR avec R-Studio <a name="Partie2" href=""></a></h1>
 <section id="charger-les-packages" class="level2">
-<h2 class="anchored" data-anchor-id="charger-les-packages">1. Charger les packages <a name="Partie1.2" href=""></a></h2>
+<h2 class="anchored" data-anchor-id="charger-les-packages">1. Charger les packages <a name="Partie2.2" href=""></a></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Installer les packages</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("tidyverse")</span></span>
@@ -162,7 +163,7 @@ Attachement du package : 'dplyr'</code></pre>
 </div>
 </section>
 <section id="charger-les-données" class="level2">
-<h2 class="anchored" data-anchor-id="charger-les-données">2. Charger les données <a name="Partie1.2" href=""></a></h2>
+<h2 class="anchored" data-anchor-id="charger-les-données">2. Charger les données <a name="Partie2.2" href=""></a></h2>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>RTqPCR_dat <span class="ot">&lt;-</span> <span class="fu">read.csv</span>( <span class="st">"C:/Users/piosteil/Desktop/4-All_git/Cours/TP_Transcripto_N3S6/RT-qPCR/RT-qPCR_data.txt"</span>, <span class="at">header =</span> <span class="cn">TRUE</span>, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\t</span><span class="st">"</span>, <span class="at">dec =</span> <span class="st">","</span>) <span class="co"># argument sep = "\t" pour tabulated, et dec = "," pour décimal </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -195,7 +196,7 @@ Attachement du package : 'dplyr'</code></pre>
 </div>
 </section>
 <section id="permutation-de-table" class="level2">
-<h2 class="anchored" data-anchor-id="permutation-de-table">3. Permutation de table <a name="Partie1.3" href=""></a></h2>
+<h2 class="anchored" data-anchor-id="permutation-de-table">3. Permutation de table <a name="Partie2.3" href=""></a></h2>
 <p>Les tableaux fourni par les machines d’analyses ne sont souvent pas adapté à la production de plots. L’utilisation de ggplot2 requiert une organisation spéciale avec pour chaque colonne un type de donnée. Nous allons donc réorganiser le tableau. Pour cela les fonctions du package tidyr vont nous permettre de manipuler le tableau sans aucun risque d’erreur de mauvaises manipulations de copier/coller</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>RTqPCR_dat_long <span class="ot">&lt;-</span> RTqPCR_dat <span class="sc">|&gt;</span> <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">13</span>, <span class="at">names_to =</span> <span class="st">"condition"</span>, <span class="at">values_to =</span> <span class="st">"Ct"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -224,7 +225,7 @@ Attachement du package : 'dplyr'</code></pre>
 </div>
 </section>
 <section id="ajout-de-metadata" class="level2">
-<h2 class="anchored" data-anchor-id="ajout-de-metadata">4. Ajout de metadata <a name="Partie1.4" href=""></a></h2>
+<h2 class="anchored" data-anchor-id="ajout-de-metadata">4. Ajout de metadata <a name="Partie2.4" href=""></a></h2>
 <p>Les données sont généralement brutes. Afin de présenter des plots compréhensible, il faut ajouter des métadata, qui sont des informations supplémentaire pour chaque échantillons.</p>
 <p>Ici nous allons créer une colonne pour le nom de chaque échantillon et le nom de chaque réplicats.</p>
 <div class="cell">
@@ -298,7 +299,7 @@ Attachement du package : 'dplyr'</code></pre>
 <p><mark>Comment fonctionne la fonction merge()?</mark></p>
 </section>
 <section id="calcul-des-delta-ct" class="level2">
-<h2 class="anchored" data-anchor-id="calcul-des-delta-ct">5. Calcul des delta Ct <a name="Partie1.5" href=""></a></h2>
+<h2 class="anchored" data-anchor-id="calcul-des-delta-ct">5. Calcul des delta Ct <a name="Partie2.5" href=""></a></h2>
 <p>La première étape va être de calculer les medianes de chaques réplicats techniques. Pour cela la table va être réduite.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>RTqPCR_median <span class="ot">&lt;-</span> RTqPCR_dat_long_meta2 <span class="sc">|&gt;</span> <span class="fu">group_by</span>(condition, Gene) <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">MedCt =</span> <span class="fu">median</span>(Ct))</span>
@@ -420,7 +421,7 @@ Attachement du package : 'dplyr'</code></pre>
 </div>
 </section>
 <section id="calcul-des-delta-delta-ct" class="level2">
-<h2 class="anchored" data-anchor-id="calcul-des-delta-delta-ct">6. Calcul des delta delta Ct<a name="Partie1.6" href=""></a></h2>
+<h2 class="anchored" data-anchor-id="calcul-des-delta-delta-ct">6. Calcul des delta delta Ct<a name="Partie2.6" href=""></a></h2>
 <p>Nous avons normalisé les données sur le GDM, c’est à dire sur la quantité de cDNA (ARN RT) chargé dans la plaque. Maintenant les valeurs de dCt ne sont pas facile à comparer. Pour cela nous allons normaliser une deuxième fois (le deuxième “delta”), cette fois-ci pas sur un gène mais sur un échantillon, l’échantillon Contrôle (CTR).</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extraction des données de l'échantillon contrôle et calcul de la moyenne</span></span>
@@ -468,7 +469,7 @@ Attachement du package : 'dplyr'</code></pre>
 </div>
 </section>
 <section id="plot-des-résultats" class="level2">
-<h2 class="anchored" data-anchor-id="plot-des-résultats">7. Plot des résultats <a name="Partie1.7" href=""></a></h2>
+<h2 class="anchored" data-anchor-id="plot-des-résultats">7. Plot des résultats <a name="Partie2.7" href=""></a></h2>
 <p>Dans cette partie on va pouvoir générer des plots pour enfin connaître d’où provienne nos échantillons. Les données représentent 240 observations (12 échantillons par 20 gènes), nous allons pouvoir réalisé une ACP.</p>
 <p><mark> Qu’est-ce qu’une ACP ? </mark></p>
 <div class="cell">
@@ -539,34 +540,34 @@ Attachement du package : 'dplyr'</code></pre>
 <p>Pour ameliorer vos plots: <a href="https://www.maths.usyd.edu.au/u/UG/SM/STAT3022/r/current/Misc/data-visualization-2.1.pdf">cheatsheet</a></p>
 </section>
 <section id="annotation-des-groupes-pour-chaque-echantillon" class="level2">
-<h2 class="anchored" data-anchor-id="annotation-des-groupes-pour-chaque-echantillon">8. Annotation des groupes pour chaque echantillon <a name="Partie1.8" href=""></a></h2>
+<h2 class="anchored" data-anchor-id="annotation-des-groupes-pour-chaque-echantillon">8. Annotation des groupes pour chaque echantillon <a name="Partie2.8" href=""></a></h2>
 <section id="calul-des-p.values" class="level3">
 <h3 class="anchored" data-anchor-id="calul-des-p.values">8.1 calul des p.values</h3>
 <p>Avant de plotter l’expression de chaque gene, on va calculer la p.value. Ensuite on pourra plotter seulement les genes significativement, differentiellement exprimés.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>my_sample <span class="ot">&lt;-</span> <span class="st">"Ech1"</span> </span>
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>my_sample <span class="ot">&lt;-</span> <span class="st">"Ech2"</span> </span>
 <span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a>RTqPCR_ddCt_Ech <span class="ot">&lt;-</span> RTqPCR_ddCt <span class="sc">|&gt;</span> <span class="fu">filter</span>(echantillon <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"CTR"</span>, my_sample)) <span class="sc">|&gt;</span> <span class="fu">group_by</span>(Gene) <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">pval =</span> <span class="fu">list</span>(<span class="fu">t.test</span>(dCt[echantillon <span class="sc">==</span> my_sample], dCt[echantillon <span class="sc">==</span> <span class="st">"CTR"</span>])<span class="sc">$</span>p.value))</span>
 <span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(RTqPCR_ddCt_Ech)<span class="sc">$</span>pval</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[[1]]
-[1] 3.106891e-05
+[1] 9.848311e-05
 
 [[2]]
-[1] 3.106891e-05
+[1] 9.848311e-05
 
 [[3]]
-[1] 3.106891e-05
+[1] 9.848311e-05
 
 [[4]]
-[1] 3.106891e-05
+[1] 9.848311e-05
 
 [[5]]
-[1] 3.106891e-05
+[1] 9.848311e-05
 
 [[6]]
-[1] 3.106891e-05</code></pre>
+[1] 9.848311e-05</code></pre>
 </div>
 </div>
 </section>
@@ -583,6 +584,10 @@ Attachement du package : 'dplyr'</code></pre>
 </div>
 </section>
 </section>
+</section>
+<section id="rna-seq" class="level1">
+<h1>3. RNA-seq <a name="Partie3" href=""></a></h1>
+<p>Now</p>
 </section>
 
 </main>

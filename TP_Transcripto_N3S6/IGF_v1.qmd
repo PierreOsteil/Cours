@@ -270,3 +270,12 @@ ggplot(RTqPCR_ddCt_Ech, aes(x=echantillon, y = TWO_ddCt, fill = Fonction))+
 
 
 # 3. RNA-seq <a name="Partie3"></a>
+Maintenant que nous avons identifié le tissus germinale nous allons pouvoir constituer un groupe d'étude pour identifier le tissus final. Pour cela, nous avons a disposition les résultats de RNA-seq sur deux répliquats de chaque échantillon. Ces résultats sont présenté de la manière suivante: 1 colonne par répliquat, et une ligne par gène. 
+Vous allez selectionner deux échantillons: le votre et un autre aléatoire. Comme chaque échantillon possède deux répliquats, vous aller travailler avec un tableau à 4 colonnes. 
+
+```{r}
+my_sample <- "Ech2"
+other_sample <- "Ech3" #un echantillon aléatoire qui n'est pas le votre
+
+read.csv2("C:/Users/piosteil/Desktop/4-All_git/Cours/TP_Transcripto_N3S6/RNA-seq/count_table.csv", sep = ";", header = TRUE)
+```
