@@ -34,10 +34,7 @@ Le TP sera réalisé sur 8 séances de 1H30. Le compte rendu sera réalisé en r
 #install.packages("ggpubr")
 
 #charger les packageSlot
-library(tidyr)
-library(dplyr)
-library(stringr)
-library(ggplot2)
+library(tidyverse)
 library(ggpubr)
 ```
 
@@ -270,12 +267,52 @@ ggplot(RTqPCR_ddCt_Ech, aes(x=echantillon, y = TWO_ddCt, fill = Fonction))+
 
 
 # 3. RNA-seq <a name="Partie3"></a>
+
+```{r}
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("DESeq2")
+```
+
+## Charger les donnees
 Maintenant que nous avons identifié le tissus germinale nous allons pouvoir constituer un groupe d'étude pour identifier le tissus final. Pour cela, nous avons a disposition les résultats de RNA-seq sur deux répliquats de chaque échantillon. Ces résultats sont présenté de la manière suivante: 1 colonne par répliquat, et une ligne par gène. 
 Vous allez selectionner deux échantillons: le votre et un autre aléatoire. Comme chaque échantillon possède deux répliquats, vous aller travailler avec un tableau à 4 colonnes. 
 
 ```{r}
-my_sample <- "Ech2"
-other_sample <- "Ech3" #un echantillon aléatoire qui n'est pas le votre
+my_sample <- "Kidney"
+other_sample <- "Cerebellum" #un echantillon aléatoire qui n'est pas le votre
 
-read.csv2("C:/Users/piosteil/Desktop/4-All_git/Cours/TP_Transcripto_N3S6/RNA-seq/count_table.csv", sep = ";", header = TRUE)
+RNA_dat <- as.matrix(read.csv2("C:/Users/piosteil/Desktop/4-All_git/Cours/TP_Transcripto_N3S6/RNA-seq/RNAseq_countTable.csv", sep = ",", header = TRUE, row.names= 1))
+head(RNA_dat)
+
+sampleCondition <- read.csv2("C:/Users/piosteil/Desktop/4-All_git/Cours/TP_Transcripto_N3S6/RNA-seq/SRAs/GSE30352_All_SRAs.txt", sep = "\t")
+
+library(DESeq2)
+dds <- DESeqDataSetFromMatrix(RNA_dat, DataFrame(sampleCondition), ~ source_name)
+dds
+```
+
+Inspecte le dataset. Combien d'echantillon, de genes et metadata? 
+
+
+## Nettoyage echantillon avec peu de count
+```{r}
+smallestGroupSize <- 3
+keep <- rowSums(counts(dds) >= 10) >= smallestGroupSize
+dds <- dds[keep,]
+dds
+```
+
+Inspecte le dataset. Combien de genes ont ete filtre? 
+
+## Genes differentiellement exprimes
+
+```{r}
+dds$source_name <- factor(dds$source_name)
+
+dds <- DESeq(dds)
+res <- results(dds)
+res
+
 ```
