@@ -280,14 +280,20 @@ Maintenant que nous avons identifié le tissus germinale nous allons pouvoir con
 Vous allez selectionner deux échantillons: le votre et un autre aléatoire. Comme chaque échantillon possède deux répliquats, vous aller travailler avec un tableau à 4 colonnes. 
 
 ```{r}
-my_sample <- "Kidney"
-other_sample <- "Cerebellum" #un echantillon aléatoire qui n'est pas le votre
-
+#data
 RNA_dat <- as.matrix(read.csv2("C:/Users/piosteil/Desktop/4-All_git/Cours/TP_Transcripto_N3S6/RNA-seq/RNAseq_countTable.csv", sep = ",", header = TRUE, row.names= 1))
 head(RNA_dat)
 
+#metadata 
 sampleCondition <- read.csv2("C:/Users/piosteil/Desktop/4-All_git/Cours/TP_Transcripto_N3S6/RNA-seq/SRAs/GSE30352_All_SRAs.txt", sep = "\t")
 
+my_sample <- "Kidney"
+ref_sample <- "Cerebellum" #un echantillon aléatoire qui n'est pas le votre
+#other_samples <- sampleCondition  |> select(source_name) |> filter(!(source_name %in% c(my_sample, ref_sample)))
+#other_samples <- unique(c(other_sample$source_name))
+```
+
+```{r}
 library(DESeq2)
 dds <- DESeqDataSetFromMatrix(RNA_dat, DataFrame(sampleCondition), ~ source_name)
 dds
@@ -312,7 +318,25 @@ Inspecte le dataset. Combien de genes ont ete filtre?
 dds$source_name <- factor(dds$source_name)
 
 dds <- DESeq(dds)
-res <- results(dds)
+res <- results(dds, contrast = c('source_name', my_sample, ref_sample), 
+                lfcThreshold = 1.5, alpha = 0.05)
 res
 
+resOrdered <- res[order(res$log2FoldChange),]
+write.csv2(resOrdered, "C:/Users/piosteil/Desktop/4-All_git/Cours/TP_Transcripto_N3S6/RNA-seq/DESeq_Kidney-Cerebellum.csv")
 ```
+
+```{r}
+summary(res)
+sum(res$padj < 0.05, na.rm=TRUE)
+```
+
+## Explorer les datas
+
+```{r}
+plotMA(res)
+
+PCA 
+Heatmap
+```
+
