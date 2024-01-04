@@ -140,43 +140,232 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("tidyverse")</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("ggpubr")</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">#charger les packageSlot</span></span>
-<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyr)</span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(dplyr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (<span class="sc">!</span><span class="fu">require</span>(<span class="st">"BiocManager"</span>, <span class="at">quietly =</span> <span class="cn">TRUE</span>))</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">install.packages</span>(<span class="st">"BiocManager"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'BiocManager' was built under R version 4.3.2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Bioconductor version '3.17' is out-of-date; the current release version '3.18'
+  is available with R version '4.3'; see https://bioconductor.org/install</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">options</span>(<span class="at">BioC_mirror =</span> <span class="st">"http://bioconductor.org"</span>)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="st">"DESeq2"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Bioconductor version 3.17 (BiocManager 1.30.22), R 4.3.1 (2023-06-16 ucrt)</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package(s) not installed when version(s) same as or greater than current; use
+  `force = TRUE` to re-install: 'DESeq2'</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="st">"apeglm"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Bioconductor version 3.17 (BiocManager 1.30.22), R 4.3.1 (2023-06-16 ucrt)</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package(s) not installed when version(s) same as or greater than current; use
+  `force = TRUE` to re-install: 'apeglm'</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>BiocManager<span class="sc">::</span><span class="fu">install</span>(<span class="st">"edgeR"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Bioconductor version 3.17 (BiocManager 1.30.22), R 4.3.1 (2023-06-16 ucrt)</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package(s) not installed when version(s) same as or greater than current; use
+  `force = TRUE` to re-install: 'edgeR'</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co">#charger les package</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'ggplot2' was built under R version 4.3.2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'dplyr' was built under R version 4.3.2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'stringr' was built under R version 4.3.2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'lubridate' was built under R version 4.3.2</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>── Attaching core tidyverse packages ──────────────────────── tidyverse 2.0.0 ──
+✔ dplyr     1.1.4     ✔ readr     2.1.4
+✔ forcats   1.0.0     ✔ stringr   1.5.1
+✔ ggplot2   3.4.4     ✔ tibble    3.2.1
+✔ lubridate 1.9.3     ✔ tidyr     1.3.0
+✔ purrr     1.0.2     
+── Conflicts ────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()
+ℹ Use the conflicted package (&lt;http://conflicted.r-lib.org/&gt;) to force all conflicts to become errors</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggpubr)</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DESeq2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Loading required package: S4Vectors
+Loading required package: stats4
+Loading required package: BiocGenerics
+
+Attaching package: 'BiocGenerics'
+
+The following objects are masked from 'package:lubridate':
+
+    intersect, setdiff, union
+
+The following objects are masked from 'package:dplyr':
+
+    combine, intersect, setdiff, union
+
+The following objects are masked from 'package:stats':
+
+    IQR, mad, sd, var, xtabs
+
+The following objects are masked from 'package:base':
+
+    anyDuplicated, aperm, append, as.data.frame, basename, cbind,
+    colnames, dirname, do.call, duplicated, eval, evalq, Filter, Find,
+    get, grep, grepl, intersect, is.unsorted, lapply, Map, mapply,
+    match, mget, order, paste, pmax, pmax.int, pmin, pmin.int,
+    Position, rank, rbind, Reduce, rownames, sapply, setdiff, sort,
+    table, tapply, union, unique, unsplit, which.max, which.min
+
+
+Attaching package: 'S4Vectors'
+
+The following objects are masked from 'package:lubridate':
+
+    second, second&lt;-
+
+The following objects are masked from 'package:dplyr':
+
+    first, rename
+
+The following object is masked from 'package:tidyr':
+
+    expand
+
+The following object is masked from 'package:utils':
+
+    findMatches
+
+The following objects are masked from 'package:base':
+
+    expand.grid, I, unname
+
+Loading required package: IRanges
+
+Attaching package: 'IRanges'
+
+The following object is masked from 'package:lubridate':
+
+    %within%
+
+The following objects are masked from 'package:dplyr':
+
+    collapse, desc, slice
+
+The following object is masked from 'package:purrr':
+
+    reduce
+
+The following object is masked from 'package:grDevices':
+
+    windows
+
+Loading required package: GenomicRanges
+Loading required package: GenomeInfoDb
+Loading required package: SummarizedExperiment
+Loading required package: MatrixGenerics
+Loading required package: matrixStats</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'matrixStats' was built under R version 4.3.2</code></pre>
+</div>
 <div class="cell-output cell-output-stderr">
 <pre><code>
-Attachement du package : 'dplyr'</code></pre>
+Attaching package: 'matrixStats'
+
+The following object is masked from 'package:dplyr':
+
+    count
+
+
+Attaching package: 'MatrixGenerics'
+
+The following objects are masked from 'package:matrixStats':
+
+    colAlls, colAnyNAs, colAnys, colAvgsPerRowSet, colCollapse,
+    colCounts, colCummaxs, colCummins, colCumprods, colCumsums,
+    colDiffs, colIQRDiffs, colIQRs, colLogSumExps, colMadDiffs,
+    colMads, colMaxs, colMeans2, colMedians, colMins, colOrderStats,
+    colProds, colQuantiles, colRanges, colRanks, colSdDiffs, colSds,
+    colSums2, colTabulates, colVarDiffs, colVars, colWeightedMads,
+    colWeightedMeans, colWeightedMedians, colWeightedSds,
+    colWeightedVars, rowAlls, rowAnyNAs, rowAnys, rowAvgsPerColSet,
+    rowCollapse, rowCounts, rowCummaxs, rowCummins, rowCumprods,
+    rowCumsums, rowDiffs, rowIQRDiffs, rowIQRs, rowLogSumExps,
+    rowMadDiffs, rowMads, rowMaxs, rowMeans2, rowMedians, rowMins,
+    rowOrderStats, rowProds, rowQuantiles, rowRanges, rowRanks,
+    rowSdDiffs, rowSds, rowSums2, rowTabulates, rowVarDiffs, rowVars,
+    rowWeightedMads, rowWeightedMeans, rowWeightedMedians,
+    rowWeightedSds, rowWeightedVars
+
+Loading required package: Biobase
+Welcome to Bioconductor
+
+    Vignettes contain introductory material; view with
+    'browseVignettes()'. To cite Bioconductor, see
+    'citation("Biobase")', and for packages 'citation("pkgname")'.
+
+
+Attaching package: 'Biobase'
+
+The following object is masked from 'package:MatrixGenerics':
+
+    rowMedians
+
+The following objects are masked from 'package:matrixStats':
+
+    anyMissing, rowMedians</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(apeglm)</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(edgeR)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: package 'edgeR' was built under R version 4.3.2</code></pre>
 </div>
 <div class="cell-output cell-output-stderr">
-<pre><code>Les objets suivants sont masqués depuis 'package:stats':
+<pre><code>Loading required package: limma
 
-    filter, lag</code></pre>
-</div>
-<div class="cell-output cell-output-stderr">
-<pre><code>Les objets suivants sont masqués depuis 'package:base':
+Attaching package: 'limma'
 
-    intersect, setdiff, setequal, union</code></pre>
+The following object is masked from 'package:DESeq2':
+
+    plotMA
+
+The following object is masked from 'package:BiocGenerics':
+
+    plotMA</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(stringr)</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggplot2)</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggpubr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="charger-les-données" class="level2">
 <h2 class="anchored" data-anchor-id="charger-les-données">2. Charger les données <a name="Partie2.2" href=""></a></h2>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>RTqPCR_dat <span class="ot">&lt;-</span> <span class="fu">read.csv</span>( <span class="st">"C:/Users/piosteil/Desktop/4-All_git/Cours/TP_Transcripto_N3S6/RT-qPCR/RT-qPCR_data.txt"</span>, <span class="at">header =</span> <span class="cn">TRUE</span>, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\t</span><span class="st">"</span>, <span class="at">dec =</span> <span class="st">","</span>) <span class="co"># argument sep = "\t" pour tabulated, et dec = "," pour décimal </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>RTqPCR_dat <span class="ot">&lt;-</span> <span class="fu">read.csv</span>( <span class="st">"C:/Users/piosteil/Desktop/Work/4-All_git/Cours/TP_Transcripto_N3S6/RT-qPCR/RT-qPCR_data.txt"</span>, <span class="at">header =</span> <span class="cn">TRUE</span>, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\t</span><span class="st">"</span>, <span class="at">dec =</span> <span class="st">","</span>) <span class="co"># argument sep = "\t" pour tabulated, et dec = "," pour décimal </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><mark>Quelle sont les dimensions du jeu de données chargé? </mark></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(RTqPCR_dat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(RTqPCR_dat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 60 13</code></pre>
 </div>
 </div>
 <p><mark>Combien de réplicat par echantillons ont été effectué? </mark></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(RTqPCR_dat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(RTqPCR_dat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   Gene Ech1_Rep1 Ech1_Rep2 Ech1_Rep3 Ech2_Rep1 Ech2_Rep2 Ech2_Rep3 Ech3_Rep1
 1 Foxa2      18.2      18.9      19.0      20.9      21.3      21.8      22.7
@@ -199,18 +388,18 @@ Attachement du package : 'dplyr'</code></pre>
 <h2 class="anchored" data-anchor-id="permutation-de-table">3. Permutation de table <a name="Partie2.3" href=""></a></h2>
 <p>Les tableaux fourni par les machines d’analyses ne sont souvent pas adapté à la production de plots. L’utilisation de ggplot2 requiert une organisation spéciale avec pour chaque colonne un type de donnée. Nous allons donc réorganiser le tableau. Pour cela les fonctions du package tidyr vont nous permettre de manipuler le tableau sans aucun risque d’erreur de mauvaises manipulations de copier/coller</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>RTqPCR_dat_long <span class="ot">&lt;-</span> RTqPCR_dat <span class="sc">|&gt;</span> <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">13</span>, <span class="at">names_to =</span> <span class="st">"condition"</span>, <span class="at">values_to =</span> <span class="st">"Ct"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>RTqPCR_dat_long <span class="ot">&lt;-</span> RTqPCR_dat <span class="sc">|&gt;</span> <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="dv">2</span><span class="sc">:</span><span class="dv">13</span>, <span class="at">names_to =</span> <span class="st">"condition"</span>, <span class="at">values_to =</span> <span class="st">"Ct"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><mark>Quelle sont les dimensions de cette nouvelle table? </mark></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(RTqPCR_dat_long)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(RTqPCR_dat_long)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 720   3</code></pre>
 </div>
 </div>
 <p><mark>Que fait pivot_longer()? </mark></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(RTqPCR_dat_long)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(RTqPCR_dat_long)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 3
   Gene  condition    Ct
@@ -229,13 +418,13 @@ Attachement du package : 'dplyr'</code></pre>
 <p>Les données sont généralement brutes. Afin de présenter des plots compréhensible, il faut ajouter des métadata, qui sont des informations supplémentaire pour chaque échantillons.</p>
 <p>Ici nous allons créer une colonne pour le nom de chaque échantillon et le nom de chaque réplicats.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Création d'un tableau à deux colonnes</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>metadata1 <span class="ot">&lt;-</span> <span class="fu">str_split_fixed</span>(RTqPCR_dat_long<span class="sc">$</span>condition, <span class="st">"_"</span>, <span class="dv">2</span>)</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(metadata1) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"echantillon"</span>, <span class="st">"bioRep"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Création d'un tableau à deux colonnes</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>metadata1 <span class="ot">&lt;-</span> <span class="fu">str_split_fixed</span>(RTqPCR_dat_long<span class="sc">$</span>condition, <span class="st">"_"</span>, <span class="dv">2</span>)</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(metadata1) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"echantillon"</span>, <span class="st">"bioRep"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><mark>Que fait str_split_fixed()?</mark></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(metadata1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(metadata1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     echantillon bioRep
 [1,] "Ech1"      "Rep1"
@@ -248,15 +437,15 @@ Attachement du package : 'dplyr'</code></pre>
 </div>
 <p><mark>Quelle sont les dimensions de cette nouvelle table? Est-ce attendu? Commentez </mark></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(metadata1) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(metadata1) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 720   2</code></pre>
 </div>
 </div>
 <p>Combinez avec le tableau de résultats</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>RTqPCR_dat_long_meta <span class="ot">&lt;-</span> <span class="fu">cbind.data.frame</span>(RTqPCR_dat_long, metadata1)</span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(RTqPCR_dat_long_meta)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>RTqPCR_dat_long_meta <span class="ot">&lt;-</span> <span class="fu">cbind.data.frame</span>(RTqPCR_dat_long, metadata1)</span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(RTqPCR_dat_long_meta)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   Gene condition   Ct echantillon bioRep
 1 Foxa2 Ech1_Rep1 18.2        Ech1   Rep1
@@ -269,19 +458,19 @@ Attachement du package : 'dplyr'</code></pre>
 </div>
 <p>Nous avons également une autre information qui va s’avérer utile pour la suite de notr analyse, qui est une ontologie sur les trois feuillet embryonnaires. Cette information se trouve dans un autre fichier “fonction_gène.txt”. Nous allons l’ouvrir et incorporer ces données aux tableaux de résultats</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>metadata2 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"C:/Users/piosteil/Desktop/4-All_git/Cours/TP_Transcripto_N3S6/RT-qPCR/fonction_gène.txt"</span>, <span class="at">header =</span> <span class="cn">TRUE</span>, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\t</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>metadata2 <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">"C:/Users/piosteil/Desktop/Work/4-All_git/Cours/TP_Transcripto_N3S6/RT-qPCR/fonction_gène.txt"</span>, <span class="at">header =</span> <span class="cn">TRUE</span>, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\t</span><span class="st">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><mark>Quelle sont les dimensions de cette nouvelle table? Est-ce attendu? Commentez</mark></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(metadata2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(metadata2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 20  2</code></pre>
 </div>
 </div>
 <p>Afin de compenser le nombre de ligne nous allons utiliser une autre fonction, merge()</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>RTqPCR_dat_long_meta2 <span class="ot">&lt;-</span> <span class="fu">merge</span>(RTqPCR_dat_long_meta, metadata2, <span class="at">by =</span> <span class="st">"Gene"</span>)</span>
-<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(RTqPCR_dat_long_meta2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>RTqPCR_dat_long_meta2 <span class="ot">&lt;-</span> <span class="fu">merge</span>(RTqPCR_dat_long_meta, metadata2, <span class="at">by =</span> <span class="st">"Gene"</span>)</span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(RTqPCR_dat_long_meta2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     Gene condition   Ct echantillon bioRep     Fonction
 715 Zfp42 Ech3_Rep1 31.8        Ech3   Rep1 Pluripotence
@@ -291,7 +480,7 @@ Attachement du package : 'dplyr'</code></pre>
 719 Zfp42  CTR_Rep2 15.4         CTR   Rep2 Pluripotence
 720 Zfp42  CTR_Rep3 16.7         CTR   Rep3 Pluripotence</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(RTqPCR_dat_long_meta2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(RTqPCR_dat_long_meta2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 720   6</code></pre>
 </div>
@@ -302,8 +491,8 @@ Attachement du package : 'dplyr'</code></pre>
 <h2 class="anchored" data-anchor-id="calcul-des-delta-ct">5. Calcul des delta Ct <a name="Partie2.5" href=""></a></h2>
 <p>La première étape va être de calculer les medianes de chaques réplicats techniques. Pour cela la table va être réduite.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>RTqPCR_median <span class="ot">&lt;-</span> RTqPCR_dat_long_meta2 <span class="sc">|&gt;</span> <span class="fu">group_by</span>(condition, Gene) <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">MedCt =</span> <span class="fu">median</span>(Ct))</span>
-<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(RTqPCR_median)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>RTqPCR_median <span class="ot">&lt;-</span> RTqPCR_dat_long_meta2 <span class="sc">|&gt;</span> <span class="fu">group_by</span>(condition, Gene) <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">MedCt =</span> <span class="fu">median</span>(Ct))</span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(RTqPCR_median)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 7
 # Groups:   condition, Gene [6]
@@ -320,8 +509,8 @@ Attachement du package : 'dplyr'</code></pre>
 <p><mark>Pourquoi calcules-t-on la médiane et non pas la moyenne pour les réplicats techniques? </mark></p>
 <p>Maintenant que les réplicats techniques ont été utilisés, on peut les enlever</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>RTqPCR_median_clean <span class="ot">&lt;-</span> RTqPCR_median <span class="sc">|&gt;</span> <span class="fu">group_by</span>(condition, Gene) <span class="sc">|&gt;</span> <span class="fu">distinct</span>(condition, <span class="at">.keep_all =</span> <span class="cn">TRUE</span>) <span class="co">#on va selectioner l'échantillon median à chaque fois</span></span>
-<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(RTqPCR_median_clean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>RTqPCR_median_clean <span class="ot">&lt;-</span> RTqPCR_median <span class="sc">|&gt;</span> <span class="fu">group_by</span>(condition, Gene) <span class="sc">|&gt;</span> <span class="fu">distinct</span>(condition, <span class="at">.keep_all =</span> <span class="cn">TRUE</span>) <span class="co">#on va selectioner l'échantillon median à chaque fois</span></span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(RTqPCR_median_clean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 7
 # Groups:   condition, Gene [6]
@@ -334,7 +523,7 @@ Attachement du package : 'dplyr'</code></pre>
 5 Zfp42 CTR_Rep2   16   CTR         Rep2   Pluripotence  15.6
 6 Zfp42 CTR_Rep3   16.6 CTR         Rep3   Pluripotence  16.6</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(RTqPCR_median_clean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(RTqPCR_median_clean)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 240   7</code></pre>
 </div>
@@ -342,8 +531,8 @@ Attachement du package : 'dplyr'</code></pre>
 <p><mark> A quoi sert la fonction “distinct”? </mark></p>
 <p>Nous allons extraire les données du gènes de ménage (GDM), et calculer la moyenne pour chaque échantillon</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>RTqPCR_median_GDM <span class="ot">&lt;-</span> RTqPCR_median <span class="sc">|&gt;</span> <span class="fu">filter</span>(Fonction <span class="sc">==</span> <span class="st">"GDM"</span>) </span>
-<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(RTqPCR_median_GDM)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>RTqPCR_median_GDM <span class="ot">&lt;-</span> RTqPCR_median <span class="sc">|&gt;</span> <span class="fu">filter</span>(Fonction <span class="sc">==</span> <span class="st">"GDM"</span>) </span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(RTqPCR_median_GDM)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 7
 # Groups:   condition, Gene [6]
@@ -356,36 +545,36 @@ Attachement du package : 'dplyr'</code></pre>
 5 TBP   Ech2_Rep2  22.6 Ech2        Rep2   GDM       23  
 6 TBP   Ech2_Rep3  24   Ech2        Rep3   GDM       24  </code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(RTqPCR_median_GDM)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="fu">nrow</span>(RTqPCR_median_GDM)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 36</code></pre>
 </div>
 </div>
 <p>Nous allons maintenant produire notre premier plot. Il s’agit de représenter la distibution des valeur moyenne de Ct en fonction des réplicats biologiques et des différent échantillons. Pour ceci nous allons utiliser un boxplot.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(RTqPCR_median_GDM, <span class="fu">aes</span>(<span class="at">x =</span> echantillon, <span class="at">y =</span> MedCt))<span class="sc">+</span></span>
-<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_boxplot</span>(<span class="at">fill=</span><span class="st">"slateblue"</span>, <span class="at">alpha=</span><span class="fl">0.2</span>)<span class="sc">+</span></span>
-<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ylim</span>(<span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">40</span>))<span class="sc">+</span> </span>
-<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_jitter</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(RTqPCR_median_GDM, <span class="fu">aes</span>(<span class="at">x =</span> echantillon, <span class="at">y =</span> MedCt))<span class="sc">+</span></span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_boxplot</span>(<span class="at">fill=</span><span class="st">"slateblue"</span>, <span class="at">alpha=</span><span class="fl">0.2</span>)<span class="sc">+</span></span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">ylim</span>(<span class="fu">c</span>(<span class="dv">10</span>, <span class="dv">40</span>))<span class="sc">+</span> </span>
+<span id="cb60-4"><a href="#cb60-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_jitter</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="IGF_v1_files/figure-html/unnamed-chunk-18-1.png" class="img-fluid" width="672"></p>
+<p><img src="IGF_v1_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p><mark> Quelle conclusion tirez-vous de ce plot? </mark></p>
 <p>L’objectif va être de soustraire les valeurs de Ct obtenu sur le GDM au valeurs de nos gènes. Dans un premier temps nous ajoutons la colonne MeanCT_GDM à notre tableau principal</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="co">#on ne garde que les deux colonne d'interêt</span></span>
-<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>RTqPCR_median_GDM_clean <span class="ot">&lt;-</span> RTqPCR_median_GDM <span class="sc">|&gt;</span> <span class="fu">select</span>(Gene, echantillon, condition, MedCt) <span class="sc">|&gt;</span> <span class="fu">distinct</span>(condition, <span class="at">.keep_all =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb41-4"><a href="#cb41-4" aria-hidden="true" tabindex="-1"></a>RTqPCR_mean_GDM <span class="ot">&lt;-</span> RTqPCR_median_GDM_clean <span class="sc">|&gt;</span> <span class="fu">group_by</span>(echantillon) <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">MeanCt_GDM =</span> <span class="fu">mean</span>(MedCt)) <span class="sc">|&gt;</span> <span class="fu">distinct</span>(echantillon, <span class="at">.keep_all =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span> <span class="fu">ungroup</span>()<span class="sc">|&gt;</span> <span class="fu">select</span>(echantillon, MeanCt_GDM)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="co">#on ne garde que les deux colonne d'interêt</span></span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>RTqPCR_median_GDM_clean <span class="ot">&lt;-</span> RTqPCR_median_GDM <span class="sc">|&gt;</span> <span class="fu">select</span>(Gene, echantillon, condition, MedCt) <span class="sc">|&gt;</span> <span class="fu">distinct</span>(condition, <span class="at">.keep_all =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb61-4"><a href="#cb61-4" aria-hidden="true" tabindex="-1"></a>RTqPCR_mean_GDM <span class="ot">&lt;-</span> RTqPCR_median_GDM_clean <span class="sc">|&gt;</span> <span class="fu">group_by</span>(echantillon) <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">MeanCt_GDM =</span> <span class="fu">mean</span>(MedCt)) <span class="sc">|&gt;</span> <span class="fu">distinct</span>(echantillon, <span class="at">.keep_all =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span> <span class="fu">ungroup</span>()<span class="sc">|&gt;</span> <span class="fu">select</span>(echantillon, MeanCt_GDM)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><mark> Discutez des deux opérations ci dessus. Quel est le but de la deuxième opération? </mark></p>
 <p>on fucionne les deux tables pour ajouter les moyenne du GDM</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>RTqPCR_dCt <span class="ot">&lt;-</span> <span class="fu">merge</span>(RTqPCR_median_clean, RTqPCR_mean_GDM,</span>
-<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>                            <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"echantillon"</span>))</span>
-<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(RTqPCR_dCt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a>RTqPCR_dCt <span class="ot">&lt;-</span> <span class="fu">merge</span>(RTqPCR_median_clean, RTqPCR_mean_GDM,</span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>                            <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"echantillon"</span>))</span>
+<span id="cb62-3"><a href="#cb62-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb62-4"><a href="#cb62-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(RTqPCR_dCt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  echantillon  Gene condition   Ct bioRep  Fonction MedCt MeanCt_GDM
 1         CTR Mesp1  CTR_Rep1 31.7   Rep1 Mesoderme  31.5       23.3
@@ -395,16 +584,16 @@ Attachement du package : 'dplyr'</code></pre>
 5         CTR Foxa2  CTR_Rep1 31.9   Rep1 Endoderme  31.0       23.3
 6         CTR Foxa2  CTR_Rep2 32.3   Rep2 Endoderme  32.0       23.3</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(RTqPCR_dCt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dim</span>(RTqPCR_dCt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[1] 240   8</code></pre>
 </div>
 </div>
 <p>On peut maintenant soustraire les MeanCT_GDM le MedCt de nos replicats techniques pour chaques gène à la moyenne de la valeur du GDM pour cet échantillon</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>RTqPCR_dCt <span class="ot">&lt;-</span> RTqPCR_dCt <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">dCt =</span> MedCt<span class="sc">-</span>MeanCt_GDM)</span>
-<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(RTqPCR_dCt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>RTqPCR_dCt <span class="ot">&lt;-</span> RTqPCR_dCt <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">dCt =</span> MedCt<span class="sc">-</span>MeanCt_GDM)</span>
+<span id="cb66-2"><a href="#cb66-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb66-3"><a href="#cb66-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(RTqPCR_dCt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  echantillon  Gene condition   Ct bioRep  Fonction MedCt MeanCt_GDM  dCt
 1         CTR Mesp1  CTR_Rep1 31.7   Rep1 Mesoderme  31.5       23.3  8.2
@@ -417,19 +606,19 @@ Attachement du package : 'dplyr'</code></pre>
 </div>
 <p>Faisons un peu de nettoyage</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(metadata1, metadata2, RTqPCR_dat, RTqPCR_dat_long, RTqPCR_dat_long_meta, RTqPCR_dat_long_meta2, RTqPCR_mean_GDM, RTqPCR_median,  RTqPCR_median_clean, RTqPCR_median_GDM, RTqPCR_median_GDM_clean) <span class="co">#on ne garde que la dernière table</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb68"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(metadata1, metadata2, RTqPCR_dat, RTqPCR_dat_long, RTqPCR_dat_long_meta, RTqPCR_dat_long_meta2, RTqPCR_mean_GDM, RTqPCR_median,  RTqPCR_median_clean, RTqPCR_median_GDM, RTqPCR_median_GDM_clean) <span class="co">#on ne garde que la dernière table</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="calcul-des-delta-delta-ct" class="level2">
 <h2 class="anchored" data-anchor-id="calcul-des-delta-delta-ct">6. Calcul des delta delta Ct<a name="Partie2.6" href=""></a></h2>
 <p>Nous avons normalisé les données sur le GDM, c’est à dire sur la quantité de cDNA (ARN RT) chargé dans la plaque. Maintenant les valeurs de dCt ne sont pas facile à comparer. Pour cela nous allons normaliser une deuxième fois (le deuxième “delta”), cette fois-ci pas sur un gène mais sur un échantillon, l’échantillon Contrôle (CTR).</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extraction des données de l'échantillon contrôle et calcul de la moyenne</span></span>
-<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a>CTR_data <span class="ot">&lt;-</span> RTqPCR_dCt <span class="sc">|&gt;</span> <span class="fu">filter</span>(echantillon <span class="sc">==</span> <span class="st">"CTR"</span>) <span class="sc">|&gt;</span> <span class="fu">group_by</span>(Gene)<span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">MeanCt_CTR =</span> <span class="fu">mean</span>(MedCt)) <span class="sc">|&gt;</span> <span class="fu">distinct</span>(Gene, <span class="at">.keep_all =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span> <span class="fu">ungroup</span>() <span class="sc">|&gt;</span> <span class="fu">select</span>(Gene, MeanCt_CTR, MeanCt_GDM)</span>
-<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(CTR_data)[<span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="st">"MeanCt_CTR_GDM"</span></span>
-<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(CTR_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Extraction des données de l'échantillon contrôle et calcul de la moyenne</span></span>
+<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a>CTR_data <span class="ot">&lt;-</span> RTqPCR_dCt <span class="sc">|&gt;</span> <span class="fu">filter</span>(echantillon <span class="sc">==</span> <span class="st">"CTR"</span>) <span class="sc">|&gt;</span> <span class="fu">group_by</span>(Gene)<span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">MeanCt_CTR =</span> <span class="fu">mean</span>(MedCt)) <span class="sc">|&gt;</span> <span class="fu">distinct</span>(Gene, <span class="at">.keep_all =</span> <span class="cn">TRUE</span>) <span class="sc">|&gt;</span> <span class="fu">ungroup</span>() <span class="sc">|&gt;</span> <span class="fu">select</span>(Gene, MeanCt_CTR, MeanCt_GDM)</span>
+<span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-4"><a href="#cb69-4" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(CTR_data)[<span class="dv">3</span>] <span class="ot">&lt;-</span> <span class="st">"MeanCt_CTR_GDM"</span></span>
+<span id="cb69-5"><a href="#cb69-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-6"><a href="#cb69-6" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(CTR_data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 3
   Gene  MeanCt_CTR MeanCt_CTR_GDM
@@ -444,10 +633,10 @@ Attachement du package : 'dplyr'</code></pre>
 </div>
 <p><mark> Discutez de l’opération ci dessus. </mark></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>RTqPCR_ddCt <span class="ot">&lt;-</span> <span class="fu">merge</span>(RTqPCR_dCt, CTR_data, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"Gene"</span>))</span>
-<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a> </span>
-<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>RTqPCR_ddCt <span class="ot">&lt;-</span> RTqPCR_ddCt <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">TWO_ddCt =</span> <span class="dv">2</span><span class="sc">^-</span>(dCt <span class="sc">-</span> (MeanCt_CTR <span class="sc">-</span> MeanCt_CTR_GDM)))</span>
-<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(RTqPCR_ddCt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>RTqPCR_ddCt <span class="ot">&lt;-</span> <span class="fu">merge</span>(RTqPCR_dCt, CTR_data, <span class="at">by =</span> <span class="fu">c</span>(<span class="st">"Gene"</span>))</span>
+<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a> </span>
+<span id="cb71-3"><a href="#cb71-3" aria-hidden="true" tabindex="-1"></a>RTqPCR_ddCt <span class="ot">&lt;-</span> RTqPCR_ddCt <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">TWO_ddCt =</span> <span class="dv">2</span><span class="sc">^-</span>(dCt <span class="sc">-</span> (MeanCt_CTR <span class="sc">-</span> MeanCt_CTR_GDM)))</span>
+<span id="cb71-4"><a href="#cb71-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(RTqPCR_ddCt)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>   Gene echantillon condition   Ct bioRep  Fonction MedCt MeanCt_GDM        dCt
 1 Foxa2        Ech3 Ech3_Rep3 24.1   Rep3 Endoderme  24.1   23.36667  0.7333333
@@ -464,8 +653,8 @@ Attachement du package : 'dplyr'</code></pre>
 5   31.86667           23.3    0.9117225
 6   31.86667           23.3 2144.8583635</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(RTqPCR_ddCt, <span class="st">"C:/Users/piosteil/Desktop/4-All_git/Cours/TP_Transcripto_N3S6/RT-qPCR/RTqPCR_ddCt.csv"</span>)</span>
-<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(CTR_data, RTqPCR_dCt) <span class="co"># on nettoie</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(RTqPCR_ddCt, <span class="st">"C:/Users/piosteil/Desktop/Work/4-All_git/Cours/TP_Transcripto_N3S6/RT-qPCR/RTqPCR_ddCt.csv"</span>)</span>
+<span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a><span class="fu">rm</span>(CTR_data, RTqPCR_dCt) <span class="co"># on nettoie</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="plot-des-résultats" class="level2">
@@ -473,14 +662,14 @@ Attachement du package : 'dplyr'</code></pre>
 <p>Dans cette partie on va pouvoir générer des plots pour enfin connaître d’où provienne nos échantillons. Les données représentent 240 observations (12 échantillons par 20 gènes), nous allons pouvoir réalisé une ACP.</p>
 <p><mark> Qu’est-ce qu’une ACP ? </mark></p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a><span class="co">#on doit pivoter le tableau pour la pca</span></span>
-<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a><span class="co">#avant cela enlevons les colonnes inutiles</span></span>
-<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>RTqPCR_dCt_only <span class="ot">&lt;-</span> RTqPCR_ddCt <span class="sc">|&gt;</span> <span class="fu">select</span>(condition, Gene, dCt)</span>
-<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a><span class="co"># on utilise pivot_wider cette fois ci</span></span>
-<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a>RTqPCR_dCt_wide <span class="ot">&lt;-</span> RTqPCR_dCt_only <span class="sc">|&gt;</span> <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> Gene, <span class="at">values_from =</span> dCt)</span>
-<span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a><span class="co">#write.csv(RTqPCR_dCt_wide, "./TP_Transcripto_N3S6/RT-qPCR/RTqPCR_dCt_wider.csv")</span></span>
-<span id="cb54-8"><a href="#cb54-8" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(RTqPCR_dCt_wide)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="co">#on doit pivoter le tableau pour la pca</span></span>
+<span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a><span class="co">#avant cela enlevons les colonnes inutiles</span></span>
+<span id="cb74-3"><a href="#cb74-3" aria-hidden="true" tabindex="-1"></a>RTqPCR_dCt_only <span class="ot">&lt;-</span> RTqPCR_ddCt <span class="sc">|&gt;</span> <span class="fu">select</span>(condition, Gene, dCt)</span>
+<span id="cb74-4"><a href="#cb74-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-5"><a href="#cb74-5" aria-hidden="true" tabindex="-1"></a><span class="co"># on utilise pivot_wider cette fois ci</span></span>
+<span id="cb74-6"><a href="#cb74-6" aria-hidden="true" tabindex="-1"></a>RTqPCR_dCt_wide <span class="ot">&lt;-</span> RTqPCR_dCt_only <span class="sc">|&gt;</span> <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> Gene, <span class="at">values_from =</span> dCt)</span>
+<span id="cb74-7"><a href="#cb74-7" aria-hidden="true" tabindex="-1"></a><span class="co">#write.csv(RTqPCR_dCt_wide, "./TP_Transcripto_N3S6/RT-qPCR/RTqPCR_dCt_wider.csv")</span></span>
+<span id="cb74-8"><a href="#cb74-8" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(RTqPCR_dCt_wide)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 21
   condition  Foxa2 Gata6  Hand2  Hnf4a  Klf4  Krt14  Mesp1  Mixl1 Nanog Nestin
@@ -494,10 +683,10 @@ Attachement du package : 'dplyr'</code></pre>
 # ℹ 10 more variables: Neurog1 &lt;dbl&gt;, Pax6 &lt;dbl&gt;, Pdx1 &lt;dbl&gt;, Pou5F1 &lt;dbl&gt;,
 #   Sox17 &lt;dbl&gt;, Sox2 &lt;dbl&gt;, TBP &lt;dbl&gt;, TBra &lt;dbl&gt;, Tbx6 &lt;dbl&gt;, Zfp42 &lt;dbl&gt;</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a>pca_rtqpcr <span class="ot">&lt;-</span> RTqPCR_dCt_wide <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="fu">where</span>(is.numeric)) <span class="sc">|&gt;</span> <span class="fu">prcomp</span>()</span>
-<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb56-3"><a href="#cb56-3" aria-hidden="true" tabindex="-1"></a>RTqPCR_dCt_ACP <span class="ot">&lt;-</span> <span class="fu">cbind.data.frame</span>(RTqPCR_dCt_wide, pca_rtqpcr<span class="sc">$</span>x[,<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>])</span>
-<span id="cb56-4"><a href="#cb56-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(RTqPCR_dCt_ACP)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a>pca_rtqpcr <span class="ot">&lt;-</span> RTqPCR_dCt_wide <span class="sc">|&gt;</span> <span class="fu">select</span>(<span class="fu">where</span>(is.numeric)) <span class="sc">|&gt;</span> <span class="fu">prcomp</span>()</span>
+<span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb76-3"><a href="#cb76-3" aria-hidden="true" tabindex="-1"></a>RTqPCR_dCt_ACP <span class="ot">&lt;-</span> <span class="fu">cbind.data.frame</span>(RTqPCR_dCt_wide, pca_rtqpcr<span class="sc">$</span>x[,<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>])</span>
+<span id="cb76-4"><a href="#cb76-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(RTqPCR_dCt_ACP)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>  condition      Foxa2     Gata6      Hand2     Hnf4a      Klf4     Krt14
 1 Ech3_Rep3  0.7333333 -2.066667  0.6333333  2.333333  9.633333 -7.066667
@@ -528,11 +717,11 @@ Attachement du package : 'dplyr'</code></pre>
 5 -39.86492   0.9073582 0.5352716
 6  17.20867  11.3653818 6.1388310</code></pre>
 </div>
-<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot</span></span>
-<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(RTqPCR_dCt_ACP, <span class="fu">aes</span>(PC1, PC2, <span class="at">color =</span> condition)) <span class="sc">+</span> </span>
-<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a><span class="co"># plot</span></span>
+<span id="cb78-2"><a href="#cb78-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(RTqPCR_dCt_ACP, <span class="fu">aes</span>(PC1, PC2, <span class="at">color =</span> condition)) <span class="sc">+</span> </span>
+<span id="cb78-3"><a href="#cb78-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="at">size =</span> <span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="IGF_v1_files/figure-html/unnamed-chunk-25-1.png" class="img-fluid" width="672"></p>
+<p><img src="IGF_v1_files/figure-html/unnamed-chunk-26-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 <p><mark> Decrivez le plot obtenu </mark></p>
@@ -545,11 +734,11 @@ Attachement du package : 'dplyr'</code></pre>
 <h3 class="anchored" data-anchor-id="calul-des-p.values">8.1 calul des p.values</h3>
 <p>Avant de plotter l’expression de chaque gene, on va calculer la p.value. Ensuite on pourra plotter seulement les genes significativement, differentiellement exprimés.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>my_sample <span class="ot">&lt;-</span> <span class="st">"Ech2"</span> </span>
-<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a>RTqPCR_ddCt_Ech <span class="ot">&lt;-</span> RTqPCR_ddCt <span class="sc">|&gt;</span> <span class="fu">filter</span>(echantillon <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"CTR"</span>, my_sample)) <span class="sc">|&gt;</span> <span class="fu">group_by</span>(Gene) <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">pval =</span> <span class="fu">list</span>(<span class="fu">t.test</span>(dCt[echantillon <span class="sc">==</span> my_sample], dCt[echantillon <span class="sc">==</span> <span class="st">"CTR"</span>])<span class="sc">$</span>p.value))</span>
-<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(RTqPCR_ddCt_Ech)<span class="sc">$</span>pval</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb79"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb79-1"><a href="#cb79-1" aria-hidden="true" tabindex="-1"></a>my_sample <span class="ot">&lt;-</span> <span class="st">"Ech2"</span> </span>
+<span id="cb79-2"><a href="#cb79-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb79-3"><a href="#cb79-3" aria-hidden="true" tabindex="-1"></a>RTqPCR_ddCt_Ech <span class="ot">&lt;-</span> RTqPCR_ddCt <span class="sc">|&gt;</span> <span class="fu">filter</span>(echantillon <span class="sc">%in%</span> <span class="fu">c</span>(<span class="st">"CTR"</span>, my_sample)) <span class="sc">|&gt;</span> <span class="fu">group_by</span>(Gene) <span class="sc">|&gt;</span> <span class="fu">mutate</span>(<span class="at">pval =</span> <span class="fu">list</span>(<span class="fu">t.test</span>(dCt[echantillon <span class="sc">==</span> my_sample], dCt[echantillon <span class="sc">==</span> <span class="st">"CTR"</span>])<span class="sc">$</span>p.value))</span>
+<span id="cb79-4"><a href="#cb79-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb79-5"><a href="#cb79-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(RTqPCR_ddCt_Ech)<span class="sc">$</span>pval</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[[1]]
 [1] 9.848311e-05
@@ -574,12 +763,12 @@ Attachement du package : 'dplyr'</code></pre>
 <section id="plot-des-genes" class="level3">
 <h3 class="anchored" data-anchor-id="plot-des-genes">8.2 Plot des genes</h3>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(RTqPCR_ddCt_Ech, <span class="fu">aes</span>(<span class="at">x=</span>echantillon, <span class="at">y =</span> TWO_ddCt, <span class="at">fill =</span> Fonction))<span class="sc">+</span></span>
-<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_boxplot</span>()<span class="sc">+</span> </span>
-<span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="st">"Gene"</span>)<span class="sc">+</span></span>
-<span id="cb61-4"><a href="#cb61-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Cyan"</span>, <span class="st">"Green"</span>, <span class="st">"black"</span>,<span class="st">"Red"</span>, <span class="st">"Magenta"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(RTqPCR_ddCt_Ech, <span class="fu">aes</span>(<span class="at">x=</span>echantillon, <span class="at">y =</span> TWO_ddCt, <span class="at">fill =</span> Fonction))<span class="sc">+</span></span>
+<span id="cb81-2"><a href="#cb81-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">geom_boxplot</span>()<span class="sc">+</span> </span>
+<span id="cb81-3"><a href="#cb81-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">facet_wrap</span>(<span class="st">"Gene"</span>)<span class="sc">+</span></span>
+<span id="cb81-4"><a href="#cb81-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">"Cyan"</span>, <span class="st">"Green"</span>, <span class="st">"black"</span>,<span class="st">"Red"</span>, <span class="st">"Magenta"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
-<p><img src="IGF_v1_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid" width="672"></p>
+<p><img src="IGF_v1_files/figure-html/unnamed-chunk-28-1.png" class="img-fluid" width="672"></p>
 </div>
 </div>
 </section>
@@ -587,7 +776,244 @@ Attachement du package : 'dplyr'</code></pre>
 </section>
 <section id="rna-seq" class="level1">
 <h1>3. RNA-seq <a name="Partie3" href=""></a></h1>
-<p>Now</p>
+<section id="charger-les-donnees" class="level2">
+<h2 class="anchored" data-anchor-id="charger-les-donnees">Charger les donnees</h2>
+<p>Maintenant que nous avons identifié le tissus germinale nous allons pouvoir constituer un groupe d’étude pour identifier le tissus final. Pour cela, nous avons a disposition les résultats de RNA-seq sur deux répliquats de chaque échantillon. Ces résultats sont présenté de la manière suivante: 1 colonne par répliquat, et une ligne par gène. Vous allez selectionner deux échantillons: le votre et un autre aléatoire. Comme chaque échantillon possède deux répliquats, vous aller travailler avec un tableau à 4 colonnes.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb82"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb82-1"><a href="#cb82-1" aria-hidden="true" tabindex="-1"></a><span class="co">#data</span></span>
+<span id="cb82-2"><a href="#cb82-2" aria-hidden="true" tabindex="-1"></a>RNA_dat <span class="ot">&lt;-</span> <span class="fu">as.matrix</span>(<span class="fu">read.csv2</span>(<span class="st">"C:/Users/piosteil/Desktop/Work/4-All_git/Cours/TP_Transcripto_N3S6/RNA-seq/RNAseq_countTable.csv"</span>, <span class="at">sep =</span> <span class="st">","</span>, <span class="at">header =</span> <span class="cn">TRUE</span>, <span class="at">row.names=</span> <span class="dv">1</span>))</span>
+<span id="cb82-3"><a href="#cb82-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(RNA_dat)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      Cerebellum Cerebellum.1 Kidney Kidney.1 Liver Liver.1
+Gnai3          2           33      1      201   154     166
+Pbsn           0            0      0        0     0       0
+Cdc45          0            0      0        0     0       2
+H19            0            1      0        1     0       0
+Scml2          0            1      0        1     0       0
+Apoh           0            0      0       13  1497    2442</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb84"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb84-1"><a href="#cb84-1" aria-hidden="true" tabindex="-1"></a><span class="co">#metadata </span></span>
+<span id="cb84-2"><a href="#cb84-2" aria-hidden="true" tabindex="-1"></a>sampleCondition <span class="ot">&lt;-</span> <span class="fu">read.csv2</span>(<span class="st">"C:/Users/piosteil/Desktop/Work/4-All_git/Cours/TP_Transcripto_N3S6/RNA-seq/SRAs/GSE30352_All_SRAs.txt"</span>, <span class="at">sep =</span> <span class="st">"</span><span class="sc">\t</span><span class="st">"</span>)</span>
+<span id="cb84-3"><a href="#cb84-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb84-4"><a href="#cb84-4" aria-hidden="true" tabindex="-1"></a>my_sample <span class="ot">&lt;-</span> <span class="st">"Kidney"</span></span>
+<span id="cb84-5"><a href="#cb84-5" aria-hidden="true" tabindex="-1"></a>ref_sample <span class="ot">&lt;-</span> <span class="st">"Cerebellum"</span> <span class="co">#un echantillon aléatoire qui n'est pas le votre</span></span>
+<span id="cb84-6"><a href="#cb84-6" aria-hidden="true" tabindex="-1"></a><span class="co">#other_samples &lt;- sampleCondition  |&gt; select(source_name) |&gt; filter(!(source_name %in% c(my_sample, ref_sample)))</span></span>
+<span id="cb84-7"><a href="#cb84-7" aria-hidden="true" tabindex="-1"></a><span class="co">#other_samples &lt;- unique(c(other_sample$source_name))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb85"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a>dds <span class="ot">&lt;-</span> <span class="fu">DESeqDataSetFromMatrix</span>(RNA_dat, <span class="fu">DataFrame</span>(sampleCondition), <span class="sc">~</span> source_name)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning in DESeqDataSet(se, design = design, ignoreRank): some variables in
+design formula are characters, converting to factors</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a>dds</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>class: DESeqDataSet 
+dim: 55109 6 
+metadata(1): version
+assays(1): counts
+rownames(55109): Gnai3 Pbsn ... CT485612.1 AC158307.1
+rowData names(0):
+colnames(6): Cerebellum Cerebellum.1 ... Liver Liver.1
+colData names(33): Run Age ... SRA.Study tissue_source</code></pre>
+</div>
+</div>
+<p>Inspecte le dataset. Combien d’echantillon, de genes et metadata?</p>
+</section>
+<section id="nettoyage-echantillon-avec-peu-de-count" class="level2">
+<h2 class="anchored" data-anchor-id="nettoyage-echantillon-avec-peu-de-count">Nettoyage echantillon avec peu de count</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb89"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb89-1"><a href="#cb89-1" aria-hidden="true" tabindex="-1"></a>smallestGroupSize <span class="ot">&lt;-</span> <span class="dv">3</span></span>
+<span id="cb89-2"><a href="#cb89-2" aria-hidden="true" tabindex="-1"></a>keep <span class="ot">&lt;-</span> <span class="fu">rowSums</span>(<span class="fu">counts</span>(dds) <span class="sc">&gt;=</span> <span class="dv">10</span>) <span class="sc">&gt;=</span> smallestGroupSize</span>
+<span id="cb89-3"><a href="#cb89-3" aria-hidden="true" tabindex="-1"></a>dds <span class="ot">&lt;-</span> dds[keep,]</span>
+<span id="cb89-4"><a href="#cb89-4" aria-hidden="true" tabindex="-1"></a>dds</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>class: DESeqDataSet 
+dim: 5364 6 
+metadata(1): version
+assays(1): counts
+rownames(5364): Gnai3 Apoh ... Gm10503 9130016M20Rik
+rowData names(0):
+colnames(6): Cerebellum Cerebellum.1 ... Liver Liver.1
+colData names(33): Run Age ... SRA.Study tissue_source</code></pre>
+</div>
+</div>
+<p>Inspecte le dataset. Combien de genes ont ete filtre?</p>
+</section>
+<section id="genes-differentiellement-exprimes" class="level2">
+<h2 class="anchored" data-anchor-id="genes-differentiellement-exprimes">Genes differentiellement exprimes</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb91"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb91-1"><a href="#cb91-1" aria-hidden="true" tabindex="-1"></a>dds<span class="sc">$</span>source_name <span class="ot">&lt;-</span> <span class="fu">factor</span>(dds<span class="sc">$</span>source_name)</span>
+<span id="cb91-2"><a href="#cb91-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb91-3"><a href="#cb91-3" aria-hidden="true" tabindex="-1"></a>dds <span class="ot">&lt;-</span> <span class="fu">DESeq</span>(dds)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>estimating size factors</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>estimating dispersions</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>gene-wise dispersion estimates</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>mean-dispersion relationship</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>final dispersion estimates</code></pre>
+</div>
+<div class="cell-output cell-output-stderr">
+<pre><code>fitting model and testing</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb98"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb98-1"><a href="#cb98-1" aria-hidden="true" tabindex="-1"></a>res <span class="ot">&lt;-</span> <span class="fu">results</span>(dds, <span class="at">contrast =</span> <span class="fu">c</span>(<span class="st">'source_name'</span>, my_sample, ref_sample))</span>
+<span id="cb98-2"><a href="#cb98-2" aria-hidden="true" tabindex="-1"></a>res</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>log2 fold change (MLE): source_name Kidney vs Cerebellum 
+Wald test p-value: source name Kidney vs Cerebellum 
+DataFrame with 5364 rows and 6 columns
+               baseMean log2FoldChange     lfcSE       stat     pvalue
+              &lt;numeric&gt;      &lt;numeric&gt; &lt;numeric&gt;  &lt;numeric&gt;  &lt;numeric&gt;
+Gnai3          31.84612       1.233779   1.05452   1.169993  0.2420037
+Apoh          234.83128       3.027703   1.71961   1.760688  0.0782913
+Narf           12.39308      -0.732434   1.26730  -0.577948  0.5632992
+Klf6            6.39722       0.877352   1.51811   0.577925  0.5633148
+Cox5a          10.44934       0.255827   1.31820   0.194072  0.8461193
+...                 ...            ...       ...        ...        ...
+Gm49336         5.95100     -0.6214803   1.53342 -0.4052897 0.68526461
+Pnp             3.99500      2.3646853   1.77022  1.3358129 0.18161042
+Riok2           4.15521      0.4008150   1.61075  0.2488380 0.80348608
+Gm10503         3.02743     -0.0513955   2.04185 -0.0251711 0.97991852
+9130016M20Rik  21.01543      5.6607785   2.11785  2.6728915 0.00752006
+                   padj
+              &lt;numeric&gt;
+Gnai3          0.633240
+Apoh           0.382799
+Narf           0.843881
+Klf6                 NA
+Cox5a          0.961007
+...                 ...
+Gm49336              NA
+Pnp                  NA
+Riok2                NA
+Gm10503              NA
+9130016M20Rik 0.0885104</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb100"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb100-1"><a href="#cb100-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Shrinkage of effect size (LFC estimates) is useful for visualization and ranking of genes. </span></span>
+<span id="cb100-2"><a href="#cb100-2" aria-hidden="true" tabindex="-1"></a>resLFC <span class="ot">&lt;-</span> <span class="fu">lfcShrink</span>(dds, <span class="at">coef=</span><span class="st">"source_name_Kidney_vs_Cerebellum"</span>, <span class="at">type=</span><span class="st">"apeglm"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stderr">
+<pre><code>using 'apeglm' for LFC shrinkage. If used in published research, please cite:
+    Zhu, A., Ibrahim, J.G., Love, M.I. (2018) Heavy-tailed prior distributions for
+    sequence count data: removing the noise and preserving large differences.
+    Bioinformatics. https://doi.org/10.1093/bioinformatics/bty895</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb102"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb102-1"><a href="#cb102-1" aria-hidden="true" tabindex="-1"></a>resLFC</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>log2 fold change (MAP): source name Kidney vs Cerebellum 
+Wald test p-value: source name Kidney vs Cerebellum 
+DataFrame with 5364 rows and 5 columns
+               baseMean log2FoldChange     lfcSE     pvalue      padj
+              &lt;numeric&gt;      &lt;numeric&gt; &lt;numeric&gt;  &lt;numeric&gt; &lt;numeric&gt;
+Gnai3          31.84612      0.4289446  0.690818  0.2420037  0.633240
+Apoh          234.83128      0.5473938  0.948278  0.0782913  0.382799
+Narf           12.39308     -0.1801204  0.635356  0.5632992  0.843881
+Klf6            6.39722      0.1781809  0.649700  0.5633148        NA
+Cox5a          10.44934      0.0584684  0.615098  0.8461193  0.961007
+...                 ...            ...       ...        ...       ...
+Gm49336         5.95100     -0.1235323  0.645449 0.68526461        NA
+Pnp             3.99500      0.3278576  0.756771 0.18161042        NA
+Riok2           4.15521      0.0441583  0.643429 0.80348608        NA
+Gm10503         3.02743     -0.0233358  0.657801 0.97991852        NA
+9130016M20Rik  21.01543      0.5602375  1.045533 0.00752006 0.0885104</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb104"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb104-1"><a href="#cb104-1" aria-hidden="true" tabindex="-1"></a>resOrdered <span class="ot">&lt;-</span> res[<span class="fu">order</span>(res<span class="sc">$</span>log2FoldChange),]</span>
+<span id="cb104-2"><a href="#cb104-2" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv2</span>(resOrdered, <span class="st">"C:/Users/piosteil/Desktop/Work/4-All_git/Cours/TP_Transcripto_N3S6/RNA-seq/DESeq_Kidney-Cerebellum.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb105"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb105-1"><a href="#cb105-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(res)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+out of 5364 with nonzero total read count
+adjusted p-value &lt; 0.1
+LFC &gt; 0 (up)       : 139, 2.6%
+LFC &lt; 0 (down)     : 113, 2.1%
+outliers [1]       : 0, 0%
+low counts [2]     : 2704, 50%
+(mean count &lt; 9)
+[1] see 'cooksCutoff' argument of ?results
+[2] see 'independentFiltering' argument of ?results</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb107"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb107-1"><a href="#cb107-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(res<span class="sc">$</span>padj <span class="sc">&lt;</span> <span class="fl">0.05</span>, <span class="at">na.rm=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 163</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb109"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb109-1"><a href="#cb109-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(resLFC)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+out of 5364 with nonzero total read count
+adjusted p-value &lt; 0.1
+LFC &gt; 0 (up)       : 139, 2.6%
+LFC &lt; 0 (down)     : 113, 2.1%
+outliers [1]       : 0, 0%
+low counts [2]     : 2704, 50%
+(mean count &lt; 9)
+[1] see 'cooksCutoff' argument of ?results
+[2] see 'independentFiltering' argument of ?results</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb111"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb111-1"><a href="#cb111-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sum</span>(resLFC<span class="sc">$</span>padj <span class="sc">&lt;</span> <span class="fl">0.05</span>, <span class="at">na.rm=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 163</code></pre>
+</div>
+</div>
+</section>
+<section id="explorer-les-datas" class="level2">
+<h2 class="anchored" data-anchor-id="explorer-les-datas">Explorer les datas</h2>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb113"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb113-1"><a href="#cb113-1" aria-hidden="true" tabindex="-1"></a><span class="co">#with DESeq2 package</span></span>
+<span id="cb113-2"><a href="#cb113-2" aria-hidden="true" tabindex="-1"></a>DESeq2<span class="sc">::</span><span class="fu">plotMA</span>(res)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="IGF_v1_files/figure-html/unnamed-chunk-34-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb114"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb114-1"><a href="#cb114-1" aria-hidden="true" tabindex="-1"></a>DESeq2<span class="sc">::</span><span class="fu">plotMA</span>(resLFC)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="IGF_v1_files/figure-html/unnamed-chunk-34-2.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb115"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb115-1"><a href="#cb115-1" aria-hidden="true" tabindex="-1"></a><span class="co"># with ggpubr package </span></span>
+<span id="cb115-2"><a href="#cb115-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggmaplot</span>(res,</span>
+<span id="cb115-3"><a href="#cb115-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">fdr =</span> <span class="fl">0.05</span>,</span>
+<span id="cb115-4"><a href="#cb115-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">fc =</span> <span class="dv">2</span>, <span class="at">size =</span> <span class="dv">2</span>,   <span class="at">top =</span> <span class="dv">50</span></span>
+<span id="cb115-5"><a href="#cb115-5" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="IGF_v1_files/figure-html/unnamed-chunk-34-3.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb116"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb116-1"><a href="#cb116-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggmaplot</span>(resLFC,</span>
+<span id="cb116-2"><a href="#cb116-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">fdr =</span> <span class="fl">0.05</span>,</span>
+<span id="cb116-3"><a href="#cb116-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">fc =</span> <span class="dv">2</span>, <span class="at">size =</span> <span class="dv">2</span>,   <span class="at">top =</span> <span class="dv">50</span></span>
+<span id="cb116-4"><a href="#cb116-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="IGF_v1_files/figure-html/unnamed-chunk-34-4.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb117"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb117-1"><a href="#cb117-1" aria-hidden="true" tabindex="-1"></a><span class="co">#PCA </span></span>
+<span id="cb117-2"><a href="#cb117-2" aria-hidden="true" tabindex="-1"></a>vsd <span class="ot">&lt;-</span> <span class="fu">vst</span>(dds, <span class="at">blind =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb117-3"><a href="#cb117-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plotPCA</span>(vsd, <span class="at">intgroup =</span> <span class="st">'source_name'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="IGF_v1_files/figure-html/unnamed-chunk-35-1.png" class="img-fluid" width="672"></p>
+</div>
+<div class="sourceCode cell-code" id="cb118"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb118-1"><a href="#cb118-1" aria-hidden="true" tabindex="-1"></a><span class="co">#PCA with ggplot2</span></span>
+<span id="cb118-2"><a href="#cb118-2" aria-hidden="true" tabindex="-1"></a>pcaData <span class="ot">&lt;-</span> <span class="fu">plotPCA</span>(vsd, <span class="at">intgroup=</span><span class="st">'source_name'</span>, <span class="at">returnData=</span><span class="cn">TRUE</span>)</span>
+<span id="cb118-3"><a href="#cb118-3" aria-hidden="true" tabindex="-1"></a>percentVar <span class="ot">&lt;-</span> <span class="fu">round</span>(<span class="dv">100</span> <span class="sc">*</span> <span class="fu">attr</span>(pcaData, <span class="st">"percentVar"</span>))</span>
+<span id="cb118-4"><a href="#cb118-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggscatter</span>(pcaData, <span class="st">'PC1'</span>, <span class="st">'PC2'</span>, <span class="at">color=</span><span class="st">'source_name'</span>, <span class="at">size =</span> <span class="dv">5</span>) <span class="sc">+</span></span>
+<span id="cb118-5"><a href="#cb118-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="fu">paste0</span>(<span class="st">"PC1: "</span>,percentVar[<span class="dv">1</span>],<span class="st">"% variance"</span>)) <span class="sc">+</span></span>
+<span id="cb118-6"><a href="#cb118-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="fu">paste0</span>(<span class="st">"PC2: "</span>,percentVar[<span class="dv">2</span>],<span class="st">"% variance"</span>)) <span class="sc">+</span> </span>
+<span id="cb118-7"><a href="#cb118-7" aria-hidden="true" tabindex="-1"></a>  <span class="fu">coord_fixed</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="IGF_v1_files/figure-html/unnamed-chunk-35-2.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb119"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb119-1"><a href="#cb119-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Heatmap</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
 </section>
 
 </main>

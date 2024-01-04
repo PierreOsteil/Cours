@@ -33,14 +33,27 @@ Le TP sera réalisé sur 8 séances de 1H30. Le compte rendu sera réalisé en r
 #install.packages("tidyverse")
 #install.packages("ggpubr")
 
-#charger les packageSlot
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+options(BioC_mirror = "http://bioconductor.org")
+BiocManager::install("DESeq2")
+BiocManager::install("apeglm")
+BiocManager::install("edgeR")
+```
+
+
+```{r}
+#charger les package
 library(tidyverse)
 library(ggpubr)
+library(DESeq2)
+library(apeglm)
+library(edgeR)
 ```
 
 ## 2. Charger les données <a name="Partie2.2"></a>
 ```{r}
-RTqPCR_dat <- read.csv( "C:/Users/piosteil/Desktop/4-All_git/Cours/TP_Transcripto_N3S6/RT-qPCR/RT-qPCR_data.txt", header = TRUE, sep = "\t", dec = ",") # argument sep = "\t" pour tabulated, et dec = "," pour décimal 
+RTqPCR_dat <- read.csv( "C:/Users/piosteil/Desktop/Work/4-All_git/Cours/TP_Transcripto_N3S6/RT-qPCR/RT-qPCR_data.txt", header = TRUE, sep = "\t", dec = ",") # argument sep = "\t" pour tabulated, et dec = "," pour décimal 
 ```
 
 <mark>Quelle sont les dimensions du jeu de données chargé? </mark>
@@ -102,7 +115,7 @@ Nous avons également une autre information qui va s'avérer utile pour la suite
 Nous allons l'ouvrir et incorporer ces données aux tableaux de résultats
 
 ```{r}
-metadata2 <- read.csv("C:/Users/piosteil/Desktop/4-All_git/Cours/TP_Transcripto_N3S6/RT-qPCR/fonction_gène.txt", header = TRUE, sep = "\t")
+metadata2 <- read.csv("C:/Users/piosteil/Desktop/Work/4-All_git/Cours/TP_Transcripto_N3S6/RT-qPCR/fonction_gène.txt", header = TRUE, sep = "\t")
 ```
 
 <mark>Quelle sont les dimensions de cette nouvelle table? Est-ce attendu? Commentez</mark>
@@ -210,7 +223,7 @@ RTqPCR_ddCt <- merge(RTqPCR_dCt, CTR_data, by = c("Gene"))
  
 RTqPCR_ddCt <- RTqPCR_ddCt |> mutate(TWO_ddCt = 2^-(dCt - (MeanCt_CTR - MeanCt_CTR_GDM)))
 head(RTqPCR_ddCt)
-write.csv(RTqPCR_ddCt, "C:/Users/piosteil/Desktop/4-All_git/Cours/TP_Transcripto_N3S6/RT-qPCR/RTqPCR_ddCt.csv")
+write.csv(RTqPCR_ddCt, "C:/Users/piosteil/Desktop/Work/4-All_git/Cours/TP_Transcripto_N3S6/RT-qPCR/RTqPCR_ddCt.csv")
 rm(CTR_data, RTqPCR_dCt) # on nettoie
 ```
 
@@ -268,24 +281,17 @@ ggplot(RTqPCR_ddCt_Ech, aes(x=echantillon, y = TWO_ddCt, fill = Fonction))+
 
 # 3. RNA-seq <a name="Partie3"></a>
 
-```{r}
-if (!require("BiocManager", quietly = TRUE))
-    install.packages("BiocManager")
-
-BiocManager::install("DESeq2")
-```
-
 ## Charger les donnees
 Maintenant que nous avons identifié le tissus germinale nous allons pouvoir constituer un groupe d'étude pour identifier le tissus final. Pour cela, nous avons a disposition les résultats de RNA-seq sur deux répliquats de chaque échantillon. Ces résultats sont présenté de la manière suivante: 1 colonne par répliquat, et une ligne par gène. 
 Vous allez selectionner deux échantillons: le votre et un autre aléatoire. Comme chaque échantillon possède deux répliquats, vous aller travailler avec un tableau à 4 colonnes. 
 
 ```{r}
 #data
-RNA_dat <- as.matrix(read.csv2("C:/Users/piosteil/Desktop/4-All_git/Cours/TP_Transcripto_N3S6/RNA-seq/RNAseq_countTable.csv", sep = ",", header = TRUE, row.names= 1))
+RNA_dat <- as.matrix(read.csv2("C:/Users/piosteil/Desktop/Work/4-All_git/Cours/TP_Transcripto_N3S6/RNA-seq/RNAseq_countTable.csv", sep = ",", header = TRUE, row.names= 1))
 head(RNA_dat)
 
 #metadata 
-sampleCondition <- read.csv2("C:/Users/piosteil/Desktop/4-All_git/Cours/TP_Transcripto_N3S6/RNA-seq/SRAs/GSE30352_All_SRAs.txt", sep = "\t")
+sampleCondition <- read.csv2("C:/Users/piosteil/Desktop/Work/4-All_git/Cours/TP_Transcripto_N3S6/RNA-seq/SRAs/GSE30352_All_SRAs.txt", sep = "\t")
 
 my_sample <- "Kidney"
 ref_sample <- "Cerebellum" #un echantillon aléatoire qui n'est pas le votre
@@ -294,7 +300,6 @@ ref_sample <- "Cerebellum" #un echantillon aléatoire qui n'est pas le votre
 ```
 
 ```{r}
-library(DESeq2)
 dds <- DESeqDataSetFromMatrix(RNA_dat, DataFrame(sampleCondition), ~ source_name)
 dds
 ```
@@ -318,25 +323,60 @@ Inspecte le dataset. Combien de genes ont ete filtre?
 dds$source_name <- factor(dds$source_name)
 
 dds <- DESeq(dds)
-res <- results(dds, contrast = c('source_name', my_sample, ref_sample), 
-                lfcThreshold = 1.5, alpha = 0.05)
+
+res <- results(dds, contrast = c('source_name', my_sample, ref_sample))
 res
 
+#Shrinkage of effect size (LFC estimates) is useful for visualization and ranking of genes. 
+resLFC <- lfcShrink(dds, coef="source_name_Kidney_vs_Cerebellum", type="apeglm")
+resLFC
+
 resOrdered <- res[order(res$log2FoldChange),]
-write.csv2(resOrdered, "C:/Users/piosteil/Desktop/4-All_git/Cours/TP_Transcripto_N3S6/RNA-seq/DESeq_Kidney-Cerebellum.csv")
+write.csv2(resOrdered, "C:/Users/piosteil/Desktop/Work/4-All_git/Cours/TP_Transcripto_N3S6/RNA-seq/DESeq_Kidney-Cerebellum.csv")
 ```
 
 ```{r}
 summary(res)
 sum(res$padj < 0.05, na.rm=TRUE)
+
+summary(resLFC)
+sum(resLFC$padj < 0.05, na.rm=TRUE)
 ```
 
 ## Explorer les datas
 
 ```{r}
-plotMA(res)
+#with DESeq2 package
+DESeq2::plotMA(res)
+DESeq2::plotMA(resLFC)
 
-PCA 
-Heatmap
+# with ggpubr package 
+ggmaplot(res,
+  fdr = 0.05,
+  fc = 2, size = 2,   top = 50
+)
+
+ggmaplot(resLFC,
+  fdr = 0.05,
+  fc = 2, size = 2,   top = 50
+)
+
+```
+```{r}
+#PCA 
+vsd <- vst(dds, blind = FALSE)
+plotPCA(vsd, intgroup = 'source_name')
+
+#PCA with ggplot2
+pcaData <- plotPCA(vsd, intgroup='source_name', returnData=TRUE)
+percentVar <- round(100 * attr(pcaData, "percentVar"))
+ggscatter(pcaData, 'PC1', 'PC2', color='source_name', size = 5) +
+  xlab(paste0("PC1: ",percentVar[1],"% variance")) +
+  ylab(paste0("PC2: ",percentVar[2],"% variance")) + 
+  coord_fixed()
+```
+
+```{r}
+#Heatmap
 ```
 
