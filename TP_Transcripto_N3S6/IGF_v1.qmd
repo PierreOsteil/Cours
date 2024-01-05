@@ -18,6 +18,7 @@ editor: visual
     7. [Plot des résultats](#Partie2.7)
     8. [Annotation des groupes pour chaque echantillon ](#Partie2.8)
 3. [RNA-seq](#Partie3) 
+    1. [Charger les donnees](#Partie3.1)
 
 
 # Introduction <a name="Intro"></a>
@@ -39,16 +40,25 @@ options(BioC_mirror = "http://bioconductor.org")
 BiocManager::install("DESeq2")
 BiocManager::install("apeglm")
 BiocManager::install("edgeR")
+BiocManager::install("ComplexHeatmap")
+BiocManager::install("goseq")
+BiocManager::install("org.Mm.eg.db")
+BiocManager::install("clusterProfiler")
+
+
 ```
 
 
 ```{r}
 #charger les package
 library(tidyverse)
-library(ggpubr)
-library(DESeq2)
-library(apeglm)
-library(edgeR)
+library(ggpubr, quietly = TRUE)
+library(DESeq2, quietly = TRUE)
+library(apeglm, quietly = TRUE)
+library(edgeR, quietly = TRUE)
+library(ComplexHeatmap, quietly = TRUE)
+library(goseq, quietly = TRUE)
+library(clusterProfiler, quietly = TRUE)
 ```
 
 ## 2. Charger les données <a name="Partie2.2"></a>
@@ -279,9 +289,14 @@ ggplot(RTqPCR_ddCt_Ech, aes(x=echantillon, y = TWO_ddCt, fill = Fonction))+
 ```
 
 
-# 3. RNA-seq <a name="Partie3"></a>
 
-## Charger les donnees
+
+
+
+
+# RNA-seq <a name="Partie3"></a>
+
+## Charger les donnees <a name="Partie3.1"></a>
 Maintenant que nous avons identifié le tissus germinale nous allons pouvoir constituer un groupe d'étude pour identifier le tissus final. Pour cela, nous avons a disposition les résultats de RNA-seq sur deux répliquats de chaque échantillon. Ces résultats sont présenté de la manière suivante: 1 colonne par répliquat, et une ligne par gène. 
 Vous allez selectionner deux échantillons: le votre et un autre aléatoire. Comme chaque échantillon possède deux répliquats, vous aller travailler avec un tableau à 4 colonnes. 
 
@@ -293,8 +308,8 @@ head(RNA_dat)
 #metadata 
 sampleCondition <- read.csv2("C:/Users/piosteil/Desktop/Work/4-All_git/Cours/TP_Transcripto_N3S6/RNA-seq/SRAs/GSE30352_All_SRAs.txt", sep = "\t")
 
-my_sample <- "Kidney"
-ref_sample <- "Cerebellum" #un echantillon aléatoire qui n'est pas le votre
+my_sample <- "Liver"
+ref_sample <- "Kidney" #un echantillon aléatoire qui n'est pas le votre
 #other_samples <- sampleCondition  |> select(source_name) |> filter(!(source_name %in% c(my_sample, ref_sample)))
 #other_samples <- unique(c(other_sample$source_name))
 ```
@@ -378,5 +393,64 @@ ggscatter(pcaData, 'PC1', 'PC2', color='source_name', size = 5) +
 
 ```{r}
 #Heatmap
+resDDS <- cbind.data.frame(res$log2FoldChange, res$padj)
+rownames(resDDS) <- rownames(res)
+resSIG <- resDDS |> filter(res$padj < 0.05)
+dim(resSIG)
+
+resSIGOrdered <- resSIG[order(abs(resSIG$`res$log2FoldChange`)),]
+resSIGOrdered_top50 <- head(resSIGOrdered, 200)
+
+RNA_df <- as.data.frame(RNA_dat)
+
+RNA_df_SIG <- RNA_df|> filter(row.names(RNA_df) %in% row.names(resSIGOrdered_top50))
+
+hm <- Heatmap(matrix = scale(RNA_df_SIG),
+               cluster_rows = TRUE,
+               clustering_method_rows = "centroid",
+               cluster_columns = TRUE,
+               clustering_method_columns = "centroid",
+               show_row_names = TRUE,
+               show_column_names = TRUE)
+hm
+
+
 ```
 
+
+```{r}
+#GOseq from vignette
+#test supported genome
+supported <- supportedOrganisms()[supportedOrganisms()$Genome=="mm9",]
+
+# Extract differentially expressed genes from "res" of DESeq2 result
+genes <- res$padj < 0.05 & !is.na(res$padj) & res$log2FoldChange > 0 
+names(genes) <- rownames(res)
+
+#Probability Weighted Function 
+pwf=nullp(genes,"mm9","geneSymbol")
+head(pwf)
+
+#Gene Ontology
+GO_wall=goseq(pwf,"mm9","geneSymbol", test.cats="GO:BP")
+head(GO_wall, 10)
+
+
+#Plot them
+bg_genes <- rownames(res) # for universe argt in the enrichGO function
+
+resSIG <- resDDS |> filter(res$padj < 0.05 & res$log2FoldChange > 0)
+resSIG_symbol <- rownames(resSIG)
+
+enrich_go <- enrichGO(
+  gene= resSIG_symbol,
+  OrgDb = org.Mm.eg.db,
+  keyType = "SYMBOL",
+  ont = "BP",
+  universe = bg_genes,
+  qvalueCutoff = 0.05,
+  readable=TRUE
+)
+dotplot(enrich_go)
+
+```
