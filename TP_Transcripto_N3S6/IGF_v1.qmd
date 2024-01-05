@@ -1,5 +1,5 @@
 ---
-title: "TP N3S6 - Introduction Génomique Fonctionnelle  2024"
+title: "TP N3S6 - Introduction a la Génomique Fonctionnelle - 2024"
 format : html
 date : 2023.10.15
 author: Pierre Osteil
@@ -8,17 +8,24 @@ editor: visual
 
 # Table des Matières
 1. [Introduction](#Intro)
-2. [Analyse de données RT-qPCR avec R-Studio ](#Partie2)
-    1. [Charger les packages](#Partie2.1)
-    2. [Charger les données](#Partie2.2)
-    3. [Permutation de table](#Partie2.3)
-    4. [Ajout de metadata ](#Partie2.4)
-    5. [Calcul des delta Ct](#Partie2.5)
-    6. [Calcul des delta delta Ct](#Partie2.6)
-    7. [Plot des résultats](#Partie2.7)
-    8. [Annotation des groupes pour chaque echantillon ](#Partie2.8)
-3. [RNA-seq](#Partie3) 
+2. [Charger les packages](#Package)
+3. [Analyse de données RT-qPCR](#Partie2)
+    1. [Charger les données](#Partie2.2)
+    2. [Permutation de table](#Partie2.3)
+    3. [Ajout de metadata ](#Partie2.4)
+    4. [Calcul des delta Ct](#Partie2.5)
+    5. [Calcul des delta delta Ct](#Partie2.6)
+    6. [Plot des résultats](#Partie2.7)
+    7. [Annotation des groupes pour chaque echantillon ](#Partie2.8)
+4. [Analyse de données RNA-seq](#Partie3) 
     1. [Charger les donnees](#Partie3.1)
+    2. [Nettoyage echantillon avec peu de count](#Partie3.2)
+    3. [Genes differentiellement exprimes ](#Partie3.3)
+    4. [Visualiser les datas](#Partie3.4)
+        1.  [PCA](#Partie3.4.1)
+        2.  [MAplot](#Partie3.4.2)
+        3.  [Heatmap](#Partie3.4.3)
+    5. [Analyse de Gene Onthologie](#Partie3.5)
 
 
 # Introduction <a name="Intro"></a>
@@ -27,9 +34,8 @@ Lors de ce TP vous avez reçu un numéro. Ce numéro correspond à un type cellu
 
 Le TP sera réalisé sur 8 séances de 1H30. Le compte rendu sera réalisé en remplissant les sections indiquées sur ce document et nous le corrigerons en TD. 
 
-# Analyse de données RT-qPCR avec R-Studio <a name="Partie2"></a>
-## 1. Charger les packages <a name="Partie2.2"></a>
-```{r}
+# Charger les packages <a name="Package"></a>
+```{r warning=FALSE, message=FALSE}
 #Installer les packages
 #install.packages("tidyverse")
 #install.packages("ggpubr")
@@ -44,24 +50,24 @@ BiocManager::install("ComplexHeatmap")
 BiocManager::install("goseq")
 BiocManager::install("org.Mm.eg.db")
 BiocManager::install("clusterProfiler")
-
-
 ```
 
 
-```{r}
+```{r warning=FALSE, message=FALSE}
 #charger les package
 library(tidyverse)
-library(ggpubr, quietly = TRUE)
-library(DESeq2, quietly = TRUE)
-library(apeglm, quietly = TRUE)
-library(edgeR, quietly = TRUE)
-library(ComplexHeatmap, quietly = TRUE)
-library(goseq, quietly = TRUE)
-library(clusterProfiler, quietly = TRUE)
+library(ggpubr, verbose = FALSE)
+library(DESeq2, verbose = FALSE)
+library(apeglm, verbose = FALSE)
+library(edgeR, verbose = FALSE)
+library(ComplexHeatmap, verbose = FALSE)
+library(goseq, verbose = FALSE)
+library(clusterProfiler, verbose = FALSE)
 ```
 
-## 2. Charger les données <a name="Partie2.2"></a>
+
+# Analyse de données RT-qPCR<a name="Partie2"></a>
+## Charger les données <a name="Partie2.2"></a>
 ```{r}
 RTqPCR_dat <- read.csv( "C:/Users/piosteil/Desktop/Work/4-All_git/Cours/TP_Transcripto_N3S6/RT-qPCR/RT-qPCR_data.txt", header = TRUE, sep = "\t", dec = ",") # argument sep = "\t" pour tabulated, et dec = "," pour décimal 
 ```
@@ -76,7 +82,7 @@ dim(RTqPCR_dat)
 head(RTqPCR_dat)
 ```
 
-## 3. Permutation de table <a name="Partie2.3"></a>
+## Permutation de table <a name="Partie2.3"></a>
 Les tableaux fourni par les machines d'analyses ne sont souvent pas adapté à la production de plots. L'utilisation de ggplot2 requiert une organisation spéciale avec pour chaque colonne un type de donnée. Nous allons donc réorganiser le tableau. Pour cela les fonctions du package tidyr vont nous permettre de manipuler le tableau sans aucun risque d'erreur de mauvaises manipulations de copier/coller
 ```{r}
 RTqPCR_dat_long <- RTqPCR_dat |> pivot_longer(cols = 2:13, names_to = "condition", values_to = "Ct")
@@ -294,7 +300,7 @@ ggplot(RTqPCR_ddCt_Ech, aes(x=echantillon, y = TWO_ddCt, fill = Fonction))+
 
 
 
-# RNA-seq <a name="Partie3"></a>
+# Analyse de données RNA-seq <a name="Partie3"></a>
 
 ## Charger les donnees <a name="Partie3.1"></a>
 Maintenant que nous avons identifié le tissus germinale nous allons pouvoir constituer un groupe d'étude pour identifier le tissus final. Pour cela, nous avons a disposition les résultats de RNA-seq sur deux répliquats de chaque échantillon. Ces résultats sont présenté de la manière suivante: 1 colonne par répliquat, et une ligne par gène. 
@@ -308,13 +314,6 @@ head(RNA_dat)
 #metadata 
 sampleCondition <- read.csv2("C:/Users/piosteil/Desktop/Work/4-All_git/Cours/TP_Transcripto_N3S6/RNA-seq/SRAs/GSE30352_All_SRAs.txt", sep = "\t")
 
-my_sample <- "Liver"
-ref_sample <- "Kidney" #un echantillon aléatoire qui n'est pas le votre
-#other_samples <- sampleCondition  |> select(source_name) |> filter(!(source_name %in% c(my_sample, ref_sample)))
-#other_samples <- unique(c(other_sample$source_name))
-```
-
-```{r}
 dds <- DESeqDataSetFromMatrix(RNA_dat, DataFrame(sampleCondition), ~ source_name)
 dds
 ```
@@ -322,7 +321,7 @@ dds
 Inspecte le dataset. Combien d'echantillon, de genes et metadata? 
 
 
-## Nettoyage echantillon avec peu de count
+## Nettoyage echantillon avec peu de count <a name="Partie3.2"></a>
 ```{r}
 smallestGroupSize <- 3
 keep <- rowSums(counts(dds) >= 10) >= smallestGroupSize
@@ -332,40 +331,55 @@ dds
 
 Inspecte le dataset. Combien de genes ont ete filtre? 
 
-## Genes differentiellement exprimes
-
+## Genes differentiellement exprimes <a name="Partie3.3"></a>
 ```{r}
 dds$source_name <- factor(dds$source_name)
 
 dds <- DESeq(dds)
 
+#Definition des echantillons a comparer
+my_sample <- "Liver"
+ref_sample <- "Kidney" #un echantillon aléatoire qui n'est pas le votre
+
 res <- results(dds, contrast = c('source_name', my_sample, ref_sample))
 res
 
-#Shrinkage of effect size (LFC estimates) is useful for visualization and ranking of genes. 
+#Shrinker l'effet de taill est important pour la visualisation seulement. 
 resLFC <- lfcShrink(dds, coef="source_name_Kidney_vs_Cerebellum", type="apeglm")
 resLFC
+summary(res)
 
+#nombre de DEGs
+sum(res$padj < 0.05, na.rm=TRUE)
+
+#sauver les data en .csv
 resOrdered <- res[order(res$log2FoldChange),]
 write.csv2(resOrdered, "C:/Users/piosteil/Desktop/Work/4-All_git/Cours/TP_Transcripto_N3S6/RNA-seq/DESeq_Kidney-Cerebellum.csv")
 ```
 
+## Visualiser les datas <a name="Partie3.4"></a>
+### PCA <a name="Partie3.4.1"></a>
 ```{r}
-summary(res)
-sum(res$padj < 0.05, na.rm=TRUE)
+#PCA 
+vsd <- vst(dds, blind = FALSE)
+plotPCA(vsd, intgroup = 'source_name')
 
-summary(resLFC)
-sum(resLFC$padj < 0.05, na.rm=TRUE)
+#PCA avec ggplot2
+pcaData <- plotPCA(vsd, intgroup='source_name', returnData=TRUE)
+percentVar <- round(100 * attr(pcaData, "percentVar"))
+ggscatter(pcaData, 'PC1', 'PC2', color='source_name', size = 5) +
+  xlab(paste0("PC1: ",percentVar[1],"% variance")) +
+  ylab(paste0("PC2: ",percentVar[2],"% variance")) + 
+  coord_fixed()
 ```
 
-## Explorer les datas
-
+### MAplot <a name="Partie3.4.2"></a>
 ```{r}
 #with DESeq2 package
 DESeq2::plotMA(res)
 DESeq2::plotMA(resLFC)
 
-# with ggpubr package 
+# avec ggpubr package 
 ggmaplot(res,
   fdr = 0.05,
   fc = 2, size = 2,   top = 50
@@ -377,20 +391,8 @@ ggmaplot(resLFC,
 )
 
 ```
-```{r}
-#PCA 
-vsd <- vst(dds, blind = FALSE)
-plotPCA(vsd, intgroup = 'source_name')
 
-#PCA with ggplot2
-pcaData <- plotPCA(vsd, intgroup='source_name', returnData=TRUE)
-percentVar <- round(100 * attr(pcaData, "percentVar"))
-ggscatter(pcaData, 'PC1', 'PC2', color='source_name', size = 5) +
-  xlab(paste0("PC1: ",percentVar[1],"% variance")) +
-  ylab(paste0("PC2: ",percentVar[2],"% variance")) + 
-  coord_fixed()
-```
-
+### Heatmap des DEGs <a name="Partie3.4.3"></a>
 ```{r}
 #Heatmap
 resDDS <- cbind.data.frame(res$log2FoldChange, res$padj)
@@ -417,7 +419,7 @@ hm
 
 ```
 
-
+## Analyse de Gene Onthologie <a name="Partie3.5"></a>
 ```{r}
 #GOseq from vignette
 #test supported genome
