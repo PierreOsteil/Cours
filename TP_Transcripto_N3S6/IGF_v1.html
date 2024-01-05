@@ -9,7 +9,7 @@
 <meta name="author" content="Pierre Osteil">
 <meta name="dcterms.date" content="2023-10-15">
 
-<title>TP N3S6 - Introduction a la Génomique Fonctionnelle - 2024</title>
+<title>TP N3S6 - Introduction à la Génomique Fonctionnelle - 2024</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -81,7 +81,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">TP N3S6 - Introduction a la Génomique Fonctionnelle - 2024</h1>
+<h1 class="title">TP N3S6 - Introduction à la Génomique Fonctionnelle - 2024</h1>
 </div>
 
 
@@ -140,8 +140,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </section>
 <section id="introduction" class="level1">
 <h1>Introduction <a name="Intro" href=""></a></h1>
-<p>Lors de ce TP vous avez reçu un numéro. Ce numéro correspond à un type cellulaire chez un mammifère. Le jeu consiste, grâce aux données que vous avez en main, à identifier à quel type cellulaire votre numéro correspond. Pour cela nous allons effectuer un ensemble de lignes de commandes du logiciel R. Elle seront appliquées sur R Studio et l’ensemble des données produites pourra être visualisé grâce au programme Quarto, utilisé pour générer ce document. Afin d’améliorer vos compétences, vous pouvez consulter cet ouvrage: <a href="https://r4ds.had.co.nz/">R for Data Science</a></p>
+<p>Lors de ce TP vous avez reçu un numéro. Ce numéro correspond à un type cellulaire chez la souris. Le jeu consiste, grâce aux données que vous avez en main, à identifier à quel type cellulaire votre numéro correspond. Pour cela nous allons effectuer un ensemble de lignes de commandes du logiciel R. Elle seront appliquées sur R Studio et l’ensemble des données produites pourra être visualisé grâce au programme Quarto, utilisé pour générer ce document. Afin d’améliorer vos compétences, vous pouvez consulter cet ouvrage: <a href="https://r4ds.had.co.nz/">R for Data Science</a></p>
 <p>Le TP sera réalisé sur 8 séances de 1H30. Le compte rendu sera réalisé en remplissant les sections indiquées sur ce document et nous le corrigerons en TD.</p>
+<section id="contexte-scientifique" class="level2">
+<h2 class="anchored" data-anchor-id="contexte-scientifique">Contexte scientifique</h2>
+<p>Un de vos collegue vient de vous envoyer un jeu de données de RT-qPCR prélevé sur 4 tissus de souris à l’etat embryonnaire (numerotes Ech1, 2 et 3) et de RNA-seq en population totale sur 3 organes adultes (nommes EchA, B et C).</p>
+<p>Il souhaite que vous traitiez les données en aveugle afin de ne pas biaise votre jugement. Il vous assigne la tache de retrouver à quel tissu ou organe correspond chaque échantillon. Chaque personne du groupe va traiter une combinaison d’échantillon (1 de RT-qPCR et 1 de RNA-seq). Lors du dernier TD nous croiserons les données afin de réassigner le nom de chaque échantillon.</p>
+</section>
 </section>
 <section id="charger-les-packages" class="level1">
 <h1>Charger les packages <a name="Package" href=""></a></h1>
@@ -164,13 +169,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#charger les package</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggpubr, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DESeq2, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(apeglm, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(edgeR, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ComplexHeatmap, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(goseq, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(clusterProfiler, <span class="at">verbose =</span> <span class="cn">FALSE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ggpubr)</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DESeq2)</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(apeglm)</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(edgeR)</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(ComplexHeatmap)</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(goseq)</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(clusterProfiler)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 <section id="analyse-de-données-rt-qpcr" class="level1">

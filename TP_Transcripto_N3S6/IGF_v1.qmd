@@ -1,5 +1,5 @@
 ---
-title: "TP N3S6 - Introduction a la Génomique Fonctionnelle - 2024"
+title: "TP N3S6 - Introduction à la Génomique Fonctionnelle - 2024"
 format : html
 date : 2023.10.15
 author: Pierre Osteil
@@ -29,10 +29,14 @@ editor: visual
 
 
 # Introduction <a name="Intro"></a>
-Lors de ce TP vous avez reçu un numéro. Ce numéro correspond à un type cellulaire chez un mammifère. Le jeu consiste, grâce aux données que vous avez en main, à identifier à quel type cellulaire votre numéro correspond. Pour cela nous allons effectuer un ensemble de lignes de commandes du logiciel R. Elle seront appliquées sur R Studio et l'ensemble des données produites pourra être visualisé grâce au programme Quarto, utilisé pour générer ce document. 
- Afin d'améliorer vos compétences, vous pouvez consulter cet ouvrage: [R for Data Science](https://r4ds.had.co.nz/)
+Lors de ce TP vous avez reçu un numéro. Ce numéro correspond à un type cellulaire chez la souris. Le jeu consiste, grâce aux données que vous avez en main, à identifier à quel type cellulaire votre numéro correspond. Pour cela nous allons effectuer un ensemble de lignes de commandes du logiciel R. Elle seront appliquées sur R Studio et l'ensemble des données produites pourra être visualisé grâce au programme Quarto, utilisé pour générer ce document. Afin d'améliorer vos compétences, vous pouvez consulter cet ouvrage: [R for Data Science](https://r4ds.had.co.nz/)
 
 Le TP sera réalisé sur 8 séances de 1H30. Le compte rendu sera réalisé en remplissant les sections indiquées sur ce document et nous le corrigerons en TD. 
+
+## Contexte scientifique 
+Un de vos collegue vient de vous envoyer un jeu de données de RT-qPCR prélevé sur 4 tissus de souris à l'etat embryonnaire (numerotes Ech1, 2 et 3) et de RNA-seq en population totale sur 3 organes adultes (nommes EchA, B et C). 
+
+Il souhaite que vous traitiez les données en aveugle afin de ne pas biaise votre jugement. Il vous assigne la tache de retrouver à quel tissu ou organe correspond chaque échantillon. Chaque personne du groupe va traiter une combinaison d'échantillon (1 de RT-qPCR et 1 de RNA-seq). Lors du dernier TD nous croiserons les données afin de réassigner le nom de chaque échantillon.  
 
 # Charger les packages <a name="Package"></a>
 ```{r warning=FALSE, message=FALSE}
@@ -56,13 +60,13 @@ BiocManager::install("clusterProfiler")
 ```{r warning=FALSE, message=FALSE}
 #charger les package
 library(tidyverse)
-library(ggpubr, verbose = FALSE)
-library(DESeq2, verbose = FALSE)
-library(apeglm, verbose = FALSE)
-library(edgeR, verbose = FALSE)
-library(ComplexHeatmap, verbose = FALSE)
-library(goseq, verbose = FALSE)
-library(clusterProfiler, verbose = FALSE)
+library(ggpubr)
+library(DESeq2)
+library(apeglm)
+library(edgeR)
+library(ComplexHeatmap)
+library(goseq)
+library(clusterProfiler)
 ```
 
 
